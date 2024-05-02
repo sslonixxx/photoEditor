@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        getPermission()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -53,12 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        val card = binding.cardView
-        card.setOnClickListener {
-            image = binding.imageView
-            //select_image(image)
-            upLoadImage(image)
-        }
+
         return super.onCreateView(name, context, attrs)
     }
 
@@ -71,8 +66,6 @@ class MainActivity : AppCompatActivity() {
             // Handle permission requests results
             // See the permission example in the Android platform samples: https://github.com/android/platform-samples
         }
-
-// Permission request logic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_MEDIA_VISUAL_USER_SELECTED))
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -80,12 +73,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestPermissions.launch(arrayOf(READ_EXTERNAL_STORAGE))
         }
-    }
-    private fun upLoadImage (imageView: ImageView?) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.type = "image/*"
-        startActivityForResult(intent, 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
