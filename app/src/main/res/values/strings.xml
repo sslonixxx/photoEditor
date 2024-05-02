@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="content_desc_main_image">main image</string>
+    <string name="content_descleft">left</string>
+    <string name="left">left</string>
+    <string name="right">right</string>
+    <string name="rotate">rotate</string>
 </resources>
