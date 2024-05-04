@@ -28,7 +28,6 @@ import com.example.photoeditor.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var image: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +56,6 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateView(name, context, attrs)
     }
 
-    var selectedImage : Uri? = null
-    var selectedBitmap : Bitmap? = null
 
     private fun getPermission () {
         // Register ActivityResult handler
@@ -77,8 +74,5 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1) {
-            image.setImageURI(data?.data)
-        }
     }
 }
