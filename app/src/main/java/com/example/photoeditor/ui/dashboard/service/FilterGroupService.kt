@@ -4,12 +4,15 @@ import com.example.photoeditor.R
 import com.example.photoeditor.ui.dashboard.model.FilterEntity
 object FilterGroupService {
 
-    val filterList = listOf(
+    val filterList = listOf( //TODO: text from R.values.strings
         FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
         FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
         FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
         FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
         FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
         FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
+        FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
+        FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL"),
+        FilterEntity(image = R.drawable.ic_home_black_24dp, text = "LOL")
     )
 }

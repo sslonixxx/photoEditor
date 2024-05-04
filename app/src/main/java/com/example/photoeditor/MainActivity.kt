@@ -57,9 +57,6 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateView(name, context, attrs)
     }
 
-    var selectedImage : Uri? = null
-    var selectedBitmap : Bitmap? = null
-
     private fun getPermission () {
         // Register ActivityResult handler
         val requestPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
