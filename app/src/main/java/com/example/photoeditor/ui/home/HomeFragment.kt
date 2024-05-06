@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.photoeditor.databinding.FragmentHomeBinding
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -23,23 +22,30 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val imageView = binding.imageView;
-        val right = binding.rotateRight
-        right.setOnClickListener {
+        val slider = binding.slider
+        var previousSliderValue = slider.value // Сохраняем изначальное значение слайдера
+        slider.addOnChangeListener { _, value, _ ->
             val matrix = getPixelsFromImageView(imageView)
             if (matrix != null) {
-                val transposedMatrix = transposePixelsMatrix(matrix)
-                // Создаем битмап из транспонированной матрицы
-                val transposedBitmap = createBitmapFromMatrixWithRowFlip(transposedMatrix)
-                // Устанавливаем транспонированный битмап в ImageView
-                imageView.setImageBitmap(transposedBitmap)
-            }
+                if (value > previousSliderValue) {
+                    val transposedMatrix = transposePixelsMatrixby90(matrix)
+                    val transposedBitmap = createBitmapFromMatrixWithRowFlip(transposedMatrix)
+                    imageView.setImageBitmap(transposedBitmap)
+                }
+                // Проверяем, двигается ли слайдер в обратную сторону
+                else{
+                    val transposedMatrix = transposePixelsMatrixby270(matrix)
+                    val transposedBitmap = createBitmapFromMatrixWithRowFlip(transposedMatrix)
+                    imageView.setImageBitmap(transposedBitmap)
+                }
+                // Обновляем предыдущее значение слайдера
 
+            }
+            previousSliderValue = value
         }
         return root
     }
@@ -67,7 +73,20 @@ class HomeFragment : Fragment() {
         // Возвращаем null, если не удалось получить битмапу
         return null
     }
-    fun transposePixelsMatrix(matrix: Array<IntArray>): Array<IntArray> {
+    fun transposePixelsMatrixby270(matrix: Array<IntArray>): Array<IntArray> {
+        val rows = matrix.size
+        val cols = matrix[0].size
+        // Создаем новую матрицу для транспонированных пикселей
+        val transposedMatrix = Array(cols) { IntArray(rows) }
+        // Проходимся по каждому элементу исходной матрицы и копируем его в транспонированную матрицу, меняя индексы
+        for (i in 0 until rows) {
+            for (j in 0 until cols) {
+                transposedMatrix[cols - 1 - j][i] = matrix[i][j]
+            }
+        }
+        return transposedMatrix
+    }
+    fun transposePixelsMatrixby90(matrix: Array<IntArray>): Array<IntArray> {
         val rows = matrix.size
         val cols = matrix[0].size
         // Создаем новую матрицу для транспонированных пикселей
@@ -79,19 +98,6 @@ class HomeFragment : Fragment() {
             }
         }
         return transposedMatrix
-    }
-    fun createBitmapFromMatrix(matrix: Array<IntArray>): Bitmap {
-        val rows = matrix.size
-        val cols = matrix[0].size
-        // Создаем новый битмап
-        val bitmap = Bitmap.createBitmap(cols, rows, Bitmap.Config.ARGB_8888)
-        // Устанавливаем пиксели из матрицы в битмап
-        for (i in 0 until rows) {
-            for (j in 0 until cols) {
-                bitmap.setPixel(j, i, matrix[i][j])
-            }
-        }
-        return bitmap
     }
     fun createBitmapFromMatrixWithRowFlip(matrix: Array<IntArray>): Bitmap {
         val rows = matrix.size
@@ -107,6 +113,7 @@ class HomeFragment : Fragment() {
         }
         return bitmap
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
