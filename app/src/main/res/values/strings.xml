@@ -9,4 +9,5 @@
     <string name="right">right</string>
     <string name="rotate">rotate</string>
     <string name="slider">Slider</string>
+    <string name="textView">Выбери угол поворота</string>
 </resources>

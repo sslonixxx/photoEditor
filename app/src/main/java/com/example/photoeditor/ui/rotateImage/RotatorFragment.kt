@@ -1,4 +1,4 @@
-package com.example.photoeditor.ui.home
+package com.example.photoeditor.ui.rotateImage
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +26,7 @@ class RotatorFragment : Fragment() {
         val root: View = binding.root
         val imageView = binding.imageView;
         val slider = binding.slider
+        val fragmentRotate = binding.fragmentRotate
         var previousSliderValue = slider.value // Сохраняем изначальное значение слайдера
         slider.addOnChangeListener { _, value, _ ->
             val matrix = getPixelsFromImageView(imageView)
