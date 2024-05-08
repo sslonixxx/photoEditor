@@ -3,7 +3,20 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="unsharp_mask">Unsharp mask</string>
+
+    <string name="button_import">+</string>
+
+    <string name="rotation">Rotate</string>
+    <string name="color_filters">Filters</string>
+    <string name="scaling">Scaling</string>
+    <string name="recognize">Face RCG</string>
+    <string name="vector_editor">Vector</string>
+    <string name="retouching">Retouch</string>
+    <string name="unsharp_mask">Unsharp</string>
+    <string name="affine_transform">Affine</string>
+    <string name="cube3d">3D cube</string>
+    <string name="default_filter_name">Default filter</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

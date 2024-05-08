@@ -4,78 +4,96 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.net.Uri
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
+import android.os.PersistableBundle
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoeditor.databinding.ActivityMainBinding
+import com.example.photoeditor.recyclerView.adapter.FilterAdapter
+import com.example.photoeditor.recyclerView.adapter.service.FilterGroupService
+import com.github.dhaval2404.imagepicker.ImagePicker
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var image: ImageView
+
+    private lateinit var adapter: FilterAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getPermission()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
-
+        setupRecyclerView(navController)
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+    override fun onStart() {
+        super.onStart()
+        val imageView = binding.imageView
 
-        return super.onCreateView(name, context, attrs)
-    }
+        val startForProfileImageResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                val resultCode = result.resultCode
+                val data = result.data
 
-    private fun getPermission () {
-        // Register ActivityResult handler
-        val requestPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
-            // Handle permission requests results
-            // See the permission example in the Android platform samples: https://github.com/android/platform-samples
+                if (resultCode == Activity.RESULT_OK) {
+                    //Image Uri will not be null for RESULT_OK
+                    val fileUri = data?.data!!
+
+                    imageView.setImageURI(fileUri)
+                }
+            }
+
+        binding.importButton.setOnClickListener {
+            ImagePicker.with(this)
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
+                .createIntent { intent ->
+                    startForProfileImageResult.launch(intent)
+                }
         }
+    }
+
+    private fun setupRecyclerView(navController: NavController) {
+        adapter = FilterAdapter { position ->
+            when (position) {
+                0 -> navController.navigate(R.id.colorFiltersFragment3)
+                else -> navController.navigate(R.id.rotationFragment)
+            }
+        }
+        adapter.data = FilterGroupService.filterList
+
+        binding.bestRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.bestRecycler.adapter = adapter
+    }
+
+    private fun getPermission() {
+        val requestPermissions =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
+
+            }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_MEDIA_VISUAL_USER_SELECTED))
+            requestPermissions.launch(
+                arrayOf(
+                    READ_MEDIA_IMAGES,
+                    READ_MEDIA_VIDEO,
+                    READ_MEDIA_VISUAL_USER_SELECTED
+                )
+            )
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO))
         } else {
             requestPermissions.launch(arrayOf(READ_EXTERNAL_STORAGE))
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1) {
-            image.setImageURI(data?.data)
         }
     }
 }
