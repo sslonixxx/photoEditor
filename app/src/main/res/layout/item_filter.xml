@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="75dp"
     android:layout_height="75dp"
-    android:background="@color/material_dynamic_neutral10">
+    android:layout_margin="6dp"
+    android:background="@drawable/rounded_background">
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="35dp"
         android:layout_height="35dp"
-
+        android:layout_margin="2dp"
         android:src="@drawable/ic_home_black_24dp"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:fontFamily="@font/kudry_font"
+        android:textColor="@color/woodsmoke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />

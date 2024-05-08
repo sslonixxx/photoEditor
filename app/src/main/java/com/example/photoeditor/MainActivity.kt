@@ -7,7 +7,6 @@ import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity() {
                 val data = result.data
 
                 if (resultCode == Activity.RESULT_OK) {
-                    //Image Uri will not be null for RESULT_OK
                     val fileUri = data?.data!!
 
                     imageView.setImageURI(fileUri)
@@ -66,8 +64,16 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView(navController: NavController) {
         adapter = FilterAdapter { position ->
             when (position) {
-                0 -> navController.navigate(R.id.colorFiltersFragment3)
-                else -> navController.navigate(R.id.rotationFragment)
+                0 -> navController.navigate(R.id.rotationFragment)
+                1 -> navController.navigate(R.id.colorFiltersFragment)
+                2 -> navController.navigate(R.id.scalingFragment)
+                3 -> navController.navigate(R.id.recognizeFragment)
+                4 -> navController.navigate(R.id.vectorFragment)
+                5 -> navController.navigate(R.id.retouchFragment)
+                6 -> navController.navigate(R.id.unsharpFragment)
+                7 -> navController.navigate(R.id.affineFragment)
+                8 -> navController.navigate(R.id.cubeFragment)
+                else -> navController.navigate(R.id.emptyFragment)
             }
         }
         adapter.data = FilterGroupService.filterList
