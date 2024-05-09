@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="75dp"
     android:layout_height="75dp"
-    android:layout_margin="6dp"
+    android:layout_margin="5dp"
     android:background="@drawable/rounded_background">
 
 
@@ -13,6 +13,7 @@
         android:layout_height="35dp"
         android:layout_margin="2dp"
         android:src="@drawable/ic_home_black_24dp"
+        android:gravity="center"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:fontFamily="@font/kudry_font"
         android:textColor="@color/woodsmoke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
