@@ -45,7 +45,18 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.google.guava:guava:33.2.0-jre")
+
+    // 2. Use Guava types in your public API:
+    api("com.google.guava:guava:33.2.0-jre")
+
+    // 3. Android - Use Guava in your implementation only:
+    implementation("com.google.guava:guava:33.2.0-android")
+
+    // 4. Android - Use Guava types in your public API:
+    api("com.google.guava:guava:33.2.0-android")
 }
