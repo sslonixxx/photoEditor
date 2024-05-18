@@ -5,4 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="button">Button</string>
     <string name="importButton">import</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="slider">slider</string>
 </resources>
