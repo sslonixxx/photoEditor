@@ -8,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.photoeditor"
+        applicationId = "com.tanxe.photoeditor"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -41,6 +41,7 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.3.3")
     implementation ("com.google.android.material:material:1.2.0-alpha06")
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.compose.material3:material3:1.2.0")
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
