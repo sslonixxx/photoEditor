@@ -37,6 +37,9 @@ android {
 
 dependencies {
     implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation ("androidx.activity:activity-ktx:1.2.3")
+    implementation ("androidx.fragment:fragment-ktx:1.3.3")
+    implementation ("com.google.android.material:material:1.2.0-alpha06")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
