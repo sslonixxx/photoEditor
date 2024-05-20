@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".ui.colorFilters.ColorFiltersFragment">
 
-    <TextView
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="соня прив)))" />
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/blackAndWhite"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Black and White Filter"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ship2" />
+
+            <ImageButton
+                android:id="@+id/colorFilter"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Color Filter"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ship2" />
+
+            <ImageButton
+                android:id="@+id/sepiaFilter"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Sepia Filter"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ship2"/>
+            <ImageButton
+                android:id="@+id/Filter4"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Filter4"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ship2"/>
+            <ImageButton
+                android:id="@+id/Filter5"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Filter5"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ship2" />
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

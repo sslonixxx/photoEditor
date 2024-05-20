@@ -26,9 +26,6 @@ class RetouchFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -176,23 +173,6 @@ class RetouchFragment : Fragment() {
         }
 
         return mutableBitmap
-    }
-
-    fun getBitmapFromImageView(imageView: ImageView): Bitmap {
-        // Получаем размеры ImageView
-        val width = imageView.width
-        val height = imageView.height
-
-        // Создаем Bitmap с такими же размерами, что и ImageView
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-        // Создаем Canvas, связанный с этим Bitmap
-        val canvas = Canvas(bitmap)
-
-        // Рисуем содержимое ImageView на Canvas
-        imageView.draw(canvas)
-
-        return bitmap
     }
 
     override fun onDestroyView() {
