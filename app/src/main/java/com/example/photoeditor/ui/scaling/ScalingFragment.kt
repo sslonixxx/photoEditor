@@ -1,60 +1,176 @@
 package com.example.photoeditor.ui.scaling
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import com.example.photoeditor.R
+import com.example.photoeditor.databinding.FragmentScalingBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ScalingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@Suppress("DEPRECATION")
 class ScalingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentScalingBinding? = null
 
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+    lateinit var imageView: ImageView
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scaling, container, false)
+    ): View {
+
+        _binding = FragmentScalingBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+        imageView = activity?.findViewById(R.id.imageView)!!
+        //val imageView = binding.imageView2;
+        val slider = binding.slider
+        val button = binding.scalingButton
+        imageView.setDrawingCacheEnabled(true)
+        imageView.measure(
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        )
+        imageView.layout(
+            0, 0,
+            imageView.measuredWidth, imageView.measuredHeight
+        )
+        imageView.buildDrawingCache(true)
+        val newImage = Bitmap.createBitmap(imageView.drawingCache)
+        imageView.setDrawingCacheEnabled(false)
+        button.setOnClickListener {
+            var savedImage = newImage
+            val k = slider.value
+            if (k > 1) {
+                savedImage = bilinearInterpolation(newImage, k)
+                imageView.setImageBitmap(savedImage)
+
+            }
+            else if (k < 1) {
+                savedImage = trilinearInterpolation(newImage, k)
+                imageView.setImageBitmap(savedImage)
+            }
+            else{
+                savedImage = newImage;
+                imageView.setImageBitmap(savedImage)
+            }
+
+        }
+
+        return root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ScalingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ScalingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    fun bilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+
+        val newWidth = (bitmap.width * k).toInt()
+        val newHeight = (bitmap.height * k).toInt()
+        val newImageArray = IntArray(newWidth * newHeight)
+
+        val proportionByX = (bitmap.width - 1).toDouble() / newWidth
+        val proportionByY = (bitmap.height - 1).toDouble() / newHeight
+
+        var newIndex = 0
+        var index: Int
+
+        for (i in 0 until newHeight) {
+            for (j in 0 until newWidth) {
+                val x = (proportionByX * j).toInt()
+                val y = (proportionByY * i).toInt()
+
+                val newX = proportionByX * j - x
+                val newY = proportionByY * i - y
+
+                index = y * bitmap.width + x
+                val p1 = pixels[index]
+                val p2 = pixels[index + 1]
+                val p3 = pixels[index + bitmap.width]
+                val p4 = pixels[index + bitmap.width + 1]
+
+                val d1 = (1 - newX) * (1 - newY)
+                val d2 = newX * (1 - newY)
+                val d3 = (1 - newX) * newY
+                val d4 = newX * newY
+
+                val blue = (p1 and 0xff) * d1 + (p2 and 0xff) * d2 + (p3 and 0xff) * d3 + (p4 and 0xff) * d4
+                val green = (p1 shr 8 and 0xff) * d1 + (p2 shr 8 and 0xff) * d2 + (p3 shr 8 and 0xff) * d3 + (p4 shr 8 and 0xff) * d4
+                val red = (p1 shr 16 and 0xff) * d1 + (p2 shr 16 and 0xff) * d2 + (p3 shr 16 and 0xff) * d3 + (p4 shr 16 and 0xff) * d4
+
+                newImageArray[newIndex++] = Color.rgb(red.toInt(), green.toInt(), blue.toInt())
             }
+        }
+        return Bitmap.createBitmap(newImageArray, newWidth, newHeight, Bitmap.Config.ARGB_8888)
+    }
+    fun trilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
+        var largerScale = 1.0
+        while (k < largerScale / 2) {
+            largerScale /= 2
+        }
+        val smallerScale = largerScale / 2
+
+        val largerBitmap = bilinearInterpolation(bitmap, largerScale.toFloat())
+        val smallerBitmap = bilinearInterpolation(bitmap, smallerScale.toFloat())
+
+        val largerBitmapPixels = IntArray(largerBitmap.width * largerBitmap.height)
+        val smallerBitmapPixels = IntArray(smallerBitmap.width * smallerBitmap.height)
+        largerBitmap.getPixels(largerBitmapPixels, 0, largerBitmap.width, 0, 0, largerBitmap.width, largerBitmap.height)
+        smallerBitmap.getPixels(smallerBitmapPixels, 0, smallerBitmap.width, 0, 0, smallerBitmap.width, smallerBitmap.height)
+
+        val newWidth = (bitmap.width * k).toInt()
+        val newHeight = (bitmap.height * k).toInt()
+        val newBitmapPixels = IntArray(newWidth * newHeight)
+        var pixelIndex = 0
+
+        for (x in 0 until newWidth) {
+            for (y in 0 until newHeight) {
+                val largerX = ((x / k).toInt() * largerScale).toInt()
+                val largerY = ((y / k).toInt() * largerScale).toInt()
+
+                val smallerX = ((x / k).toInt() * smallerScale).toInt()
+                val smallerY = ((y / k).toInt() * smallerScale).toInt()
+
+                val largerIndex = (largerX * largerBitmap.height + largerY)
+                val smallerIndex = (smallerX * smallerBitmap.height + smallerY)
+
+                var pixelLarger = 0
+                var pixelSmaller = 0
+                try {
+                    pixelLarger = largerBitmapPixels[largerIndex]
+                    pixelSmaller = smallerBitmapPixels[smallerIndex]
+                } catch (e: Exception) {
+                    pixelLarger = largerBitmapPixels[largerIndex - 1]
+                    pixelSmaller = smallerBitmapPixels[smallerIndex - 1]
+                }
+
+                val redLarger = Color.red(pixelLarger)
+                val greenLarger = Color.green(pixelLarger)
+                val blueLarger = Color.blue(pixelLarger)
+
+                val redSmaller = Color.red(pixelSmaller)
+                val greenSmaller = Color.green(pixelSmaller)
+                val blueSmaller = Color.blue(pixelSmaller)
+
+                val red = (redLarger * (1 / smallerScale - k) + redSmaller * (k - (1 / largerScale))) / (1 / largerScale)
+                val green = (greenLarger * (1 / smallerScale - k) + greenSmaller * (k - (1 / largerScale))) / (1 / largerScale)
+                val blue = (blueLarger * (1 / smallerScale - k) + blueSmaller * (k - (1 / largerScale))) / (1 / largerScale)
+
+                newBitmapPixels[pixelIndex++] = Color.rgb(red.toInt(), green.toInt(), blue.toInt())
+            }
+        }
+        return Bitmap.createBitmap(newBitmapPixels, newWidth, newHeight, Bitmap.Config.ARGB_8888)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
