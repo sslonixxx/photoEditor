@@ -8,6 +8,7 @@
 
     <com.google.android.material.slider.Slider
         android:id="@+id/slider"
+
         android:layout_width="328dp"
         android:layout_height="46dp"
         android:contentDescription="@string/slider"

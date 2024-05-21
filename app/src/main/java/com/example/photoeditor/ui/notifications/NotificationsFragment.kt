@@ -28,10 +28,10 @@ class NotificationsFragment : Fragment() {
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val imageView = binding.imageView;
+        //val imageView = binding.imageView;
         val slider = binding.slider
         val button = binding.scalingButton
-        imageView.setDrawingCacheEnabled(true)
+        /*imageView.setDrawingCacheEnabled(true)
         imageView.measure(
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
@@ -60,7 +60,7 @@ class NotificationsFragment : Fragment() {
                 imageView.setImageBitmap(savedImage)
             }
 
-        }
+        }*/
 
         return root
     }
