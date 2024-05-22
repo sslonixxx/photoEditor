@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.example.photoeditor.R
 import com.example.photoeditor.databinding.FragmentFiltersBinding
+import androidx.navigation.fragment.findNavController
 
 
 class ColorFiltersFragment : Fragment() {
@@ -34,13 +36,16 @@ class ColorFiltersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
-        val blackAndWhiteFilter = blackAndWhite()
+        val blackAndWhiteFilter = BlackAndWhite()
         binding.blackAndWhite.setOnClickListener {
             blackAndWhiteFilter.setImageViewWithBWFilter(imageView)
         }
+        binding.mosaic.setOnClickListener {
+            findNavController().navigate(R.id.mosaicFragment)
+        }
     }
 
-    class blackAndWhite {
+    class BlackAndWhite {
         fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
             // Make sure the ImageView has a drawable set
             if (imageView.drawable == null) {

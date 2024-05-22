@@ -54,4 +54,9 @@
         android:name="com.example.photoeditor.ui.EmptyFragment"
         android:label="fragment_empty"
         tools:layout="@layout/fragment_empty" />
+    <fragment
+        android:id="@+id/mosaicFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.MosaicFragment"
+        android:label="fragment_mosaic"
+        tools:layout="@layout/fragment_mosaic" />
 </navigation>

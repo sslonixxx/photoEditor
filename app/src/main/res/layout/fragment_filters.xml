@@ -30,10 +30,10 @@
                 android:src="@drawable/ship2" />
 
             <ImageButton
-                android:id="@+id/colorFilter"
+                android:id="@+id/mosaic"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:contentDescription="Color Filter"
+                android:contentDescription="mosaic"
                 android:padding="8dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ship2" />
