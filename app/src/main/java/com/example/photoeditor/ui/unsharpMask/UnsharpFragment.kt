@@ -89,9 +89,9 @@ class UnsharpFragment : Fragment() {
                 val gBlurred = Color.green(blurredPixel)
                 val bBlurred = Color.blue(blurredPixel)
 
-                val rResult = (r + amount * (r - rBlurred) * 2).toInt().coerceIn(0, 255)
-                val gResult = (g + amount * (g - gBlurred) * 2).toInt().coerceIn(0, 255)
-                val bResult = (b + amount * (b - bBlurred) * 2).toInt().coerceIn(0, 255)
+                val rResult = (r + amount * (r - rBlurred)).toInt().coerceIn(0, 255)
+                val gResult = (g + amount * (g - gBlurred)).toInt().coerceIn(0, 255)
+                val bResult = (b + amount * (b - bBlurred)).toInt().coerceIn(0, 255)
 
                 val resultPixel = Color.rgb(rResult, gResult, bResult)
                 result.setPixel(x, y, resultPixel)
