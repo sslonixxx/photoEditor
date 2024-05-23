@@ -37,25 +37,14 @@
             app:layout_constraintEnd_toStartOf="@+id/saveButton"
             app:layout_constraintStart_toEndOf="@+id/importButton">
 
-            <ImageButton
-                android:id="@+id/turnLeftButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+            <ProgressBar
+                android:id="@+id/progressBar1"
                 android:layout_marginTop="8dp"
-                android:background="@color/star_white"
-                android:contentDescription="@string/turn_left"
-                android:src="@drawable/btn_turn_left" />
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:visibility="gone"
+                android:indeterminateTint="@color/woodsmoke" />
 
-            <ImageButton
-                android:id="@+id/turnRightButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/star_white"
-                android:contentDescription="@string/turn_right"
-                android:src="@drawable/btn_turn_right" />
         </LinearLayout>
 
 
@@ -84,13 +73,11 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
         tools:srcCompat="@tools:sample/avatars" />
 
-
-
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="200dp"
         android:layout_margin="5dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/bestRecycler"
