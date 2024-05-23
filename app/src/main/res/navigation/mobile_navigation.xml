@@ -59,4 +59,19 @@
         android:name="com.example.photoeditor.ui.colorFilters.MosaicFragment"
         android:label="fragment_mosaic"
         tools:layout="@layout/fragment_mosaic" />
+    <fragment
+        android:id="@+id/gaussianBlurFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.GaussianBlurFragment"
+        android:label="fragment_gaussian_blur"
+        tools:layout="@layout/fragment_gaussian_blur" />
+    <fragment
+        android:id="@+id/noirFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.NoirFragment"
+        android:label="fragment_noir"
+        tools:layout="@layout/fragment_noir" />
+    <fragment
+        android:id="@+id/warmFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.WarmFragment"
+        android:label="fragment_warm"
+        tools:layout="@layout/fragment_warm" />
 </navigation>

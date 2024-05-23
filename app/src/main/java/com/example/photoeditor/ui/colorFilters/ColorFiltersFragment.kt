@@ -10,19 +10,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.example.photoeditor.R
 import com.example.photoeditor.databinding.FragmentFiltersBinding
-import androidx.navigation.fragment.findNavController
-
 
 class ColorFiltersFragment : Fragment() {
     private var _binding: FragmentFiltersBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var originalBitmap: Bitmap? = null
+    private var isBWFilterApplied = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,69 +27,69 @@ class ColorFiltersFragment : Fragment() {
     ): View? {
         _binding = FragmentFiltersBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
-        val blackAndWhiteFilter = BlackAndWhite()
+
+        originalBitmap = (imageView.drawable as BitmapDrawable).bitmap
+
         binding.blackAndWhite.setOnClickListener {
-            blackAndWhiteFilter.setImageViewWithBWFilter(imageView)
+            toggleBWFilter()
         }
         binding.mosaic.setOnClickListener {
             findNavController().navigate(R.id.mosaicFragment)
         }
+        binding.gaussingBlurFilter.setOnClickListener{
+            findNavController().navigate(R.id.gaussianBlurFragment)
+        }
+        binding.noir.setOnClickListener{
+            findNavController().navigate(R.id.noirFragment)
+        }
+        binding.warm.setOnClickListener{
+            findNavController().navigate(R.id.warmFragment)
+        }
+    }
+
+    private fun toggleBWFilter() {
+        if (isBWFilterApplied) {
+            imageView.setImageBitmap(originalBitmap)
+            isBWFilterApplied = false
+        } else {
+            val blackAndWhiteFilter = BlackAndWhite()
+            blackAndWhiteFilter.setImageViewWithBWFilter(imageView)
+            isBWFilterApplied = true
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     class BlackAndWhite {
-        fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
-            // Make sure the ImageView has a drawable set
-            if (imageView.drawable == null) {
-                return null
-            }
-
-            // Get the drawable from the ImageView
-            val drawable = imageView.drawable as BitmapDrawable
-            // Get the bitmap from the drawable
-            val bitmap = drawable.bitmap
-
-            return bitmap
-        }
-
         fun applyBlackAndWhiteFilter(original: Bitmap): Bitmap {
-            // Create a mutable bitmap with the same dimensions as the original
             val bwBitmap = Bitmap.createBitmap(original.width, original.height, original.config)
-
-            // Loop through the pixels and convert them to grayscale
             for (i in 0 until original.width) {
                 for (j in 0 until original.height) {
-                    // Get the current pixel color
                     val pixel = original.getPixel(i, j)
-                    // Extract the red, green, and blue components
-                    val red: Int = Color.red(pixel)
-                    val green: Int = Color.green(pixel)
-                    val blue: Int = Color.blue(pixel)
-
-                    // Calculate the grayscale value
+                    val red = Color.red(pixel)
+                    val green = Color.green(pixel)
+                    val blue = Color.blue(pixel)
                     val gray = (red + green + blue) / 3
-
-                    // Set the new pixel color to grayscale
-                    val newPixel: Int = Color.rgb(gray, gray, gray)
+                    val newPixel = Color.rgb(gray, gray, gray)
                     bwBitmap.setPixel(i, j, newPixel)
                 }
             }
-
             return bwBitmap
         }
 
         fun setImageViewWithBWFilter(imageView: ImageView) {
-            val originalBitmap = getBitmapFromImageView(imageView)
-            if (originalBitmap != null) {
-                val bwBitmap = applyBlackAndWhiteFilter(originalBitmap)
-                imageView.setImageBitmap(bwBitmap)
-            }
+            val drawable = imageView.drawable as BitmapDrawable
+            val originalBitmap = drawable.bitmap
+            val bwBitmap = applyBlackAndWhiteFilter(originalBitmap)
+            imageView.setImageBitmap(bwBitmap)
         }
     }
-
 }
