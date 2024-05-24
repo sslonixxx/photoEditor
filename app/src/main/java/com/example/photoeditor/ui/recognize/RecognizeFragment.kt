@@ -137,8 +137,6 @@ class RecognizeFragment : Fragment() {
         }
         return originalMat
     }
-
-
 }
 
 
