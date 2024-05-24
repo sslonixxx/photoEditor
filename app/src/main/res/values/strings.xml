@@ -38,4 +38,7 @@
     <string name="Size_of_brush">Size of brush</string>
     <string name="Brightness_factor">Brightness factor</string>
     <string name="Warm_factor">Warm factor</string>
+    <string name="scale">scale</string>
+    <string name="scaling_factor">Scaling factor:</string>
+    <string name="angle">Angle:</string>
 </resources>
