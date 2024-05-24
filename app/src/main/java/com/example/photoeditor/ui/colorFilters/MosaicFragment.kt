@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MosaicFragment : Fragment() {
+
     private var _binding: FragmentMosaicBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView

@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class GaussianBlurFragment : Fragment() {
+
     private var _binding: FragmentGaussianBlurBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
