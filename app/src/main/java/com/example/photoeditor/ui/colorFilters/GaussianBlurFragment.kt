@@ -25,7 +25,6 @@ class GaussianBlurFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
     private var spinner: ProgressBar? = null
-    private var currentImage: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +44,6 @@ class GaussianBlurFragment : Fragment() {
         spinner = activity?.findViewById(R.id.progressBar1)!!
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
         val userImage = imageView.drawable
-        currentImage = imageView.drawable
         val gaussianBlurFilter = GaussingBlurFilter()
         val slider = binding.radiusSlider
         var radius = 0
@@ -64,21 +62,11 @@ class GaussianBlurFragment : Fragment() {
                     }
                     imageView.setImageBitmap(blurredBitmap)
                     spinner?.visibility = View.GONE
-                    currentImage = imageView.drawable
                 }
             }
         }
-        compareButton.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    imageView.setImageDrawable(userImage)
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    imageView.setImageDrawable(currentImage)
-                }
-            }
-            true
+        compareButton.setOnClickListener {
+            imageView.setImageDrawable(userImage);
         }
     }
 

@@ -10,8 +10,8 @@
         android:id="@+id/sizeOfBrushSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="@dimen/slider_margin"
+        android:layout_marginEnd="@dimen/slider_margin"
         android:contentDescription="@string/slider"
         android:stepSize="1.0"
         android:valueFrom="0.0"
@@ -25,24 +25,20 @@
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sizeOfBrushSlider"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/sizeOfBrushSlider" />
     <TextView
         android:id="@+id/textView"
-        android:layout_width="261dp"
-        android:layout_height="30dp"
-        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/Mosaic_factor"
         android:textAlignment="gravity"
-        android:textColor="#0B0A0A"
-        android:textSize="14sp"
+        android:textColor="@color/woodsmoke"
+        android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toTopOf="@+id/sizeOfBrushSlider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.373"
         app:layout_constraintStart_toStartOf="parent" />
 
 

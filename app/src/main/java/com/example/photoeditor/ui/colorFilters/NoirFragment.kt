@@ -44,7 +44,6 @@ class NoirFragment : Fragment() {
         spinner = activity?.findViewById(R.id.progressBar1)!!
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
         val userImage = imageView.drawable
-        currentImage = imageView.drawable
         val noirFilter = NoirFilter()
         val grainSlider = binding.grainSlider
         val brightnessSlider = binding.brightnessSlider
@@ -73,18 +72,8 @@ class NoirFragment : Fragment() {
                 }
             }
         }
-
-        compareButton.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    imageView.setImageDrawable(userImage)
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    imageView.setImageDrawable(currentImage)
-                }
-            }
-            true
+        compareButton.setOnClickListener {
+            imageView.setImageDrawable(userImage);
         }
     }
 

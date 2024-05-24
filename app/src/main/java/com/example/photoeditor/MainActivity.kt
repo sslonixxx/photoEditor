@@ -12,8 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
-import android.view.View.MeasureSpec
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +22,6 @@ import com.example.photoeditor.databinding.ActivityMainBinding
 import com.example.photoeditor.recyclerView.adapter.FilterAdapter
 import com.example.photoeditor.recyclerView.adapter.service.FilterGroupService
 import com.github.dhaval2404.imagepicker.ImagePicker
-import org.opencv.android.OpenCVLoader
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
@@ -63,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         binding.importButton.setOnClickListener {
             ImagePicker.with(this)
                 .crop()
-                .compress(1024)
+                .compress(2160)
                 .maxResultSize(1080, 1080)
                 .createIntent { intent ->
                     startForProfileImageResult.launch(intent)
@@ -86,9 +83,9 @@ class MainActivity : AppCompatActivity() {
                 1 -> navController.navigate(R.id.colorFiltersFragment)
                 2 -> navController.navigate(R.id.scalingFragment)
                 3 -> navController.navigate(R.id.recognizeFragment)
-                4 -> navController.navigate(R.id.vectorFragment)
-                5 -> navController.navigate(R.id.retouchFragment)
-                6 -> navController.navigate(R.id.unsharpFragment)
+                4 -> navController.navigate(R.id.retouchFragment)
+                5 -> navController.navigate(R.id.unsharpFragment)
+                6 -> navController.navigate(R.id.vectorFragment)
                 7 -> navController.navigate(R.id.affineFragment)
                 8 -> navController.navigate(R.id.cubeFragment)
                 else -> navController.navigate(R.id.emptyFragment)
