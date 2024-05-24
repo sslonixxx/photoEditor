@@ -39,7 +39,6 @@ class RetouchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         var rateOfRetouching: Float = 0f
         var sizeOfBrush: Float = 0f
 

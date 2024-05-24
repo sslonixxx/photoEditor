@@ -1,80 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.colorFilters.NoirFragment">
+    tools:context=".ui.colorFilters.NoirFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Grain_factor"
+        android:textAlignment="gravity"
+        android:textColor="@color/woodsmoke"
+        android:textSize="@dimen/text_size"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginEnd="@dimen/text_margin"
+        app:layout_constraintBottom_toTopOf="@+id/grainSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/grainSlider"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/slider_margin"
+        android:layout_marginEnd="@dimen/slider_margin"
         android:stepSize="1.0"
         android:valueFrom="0.0"
         android:valueTo="100.0"
+        app:layout_constraintBottom_toTopOf="@+id/textView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginEnd="@dimen/text_margin"
+        android:text="@string/Brightness_factor"
+        android:textAlignment="gravity"
+        android:textColor="@color/woodsmoke"
+        android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toTopOf="@+id/brightnessSlider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.972" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/brightnessSlider"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/slider_margin"
+        android:layout_marginEnd="@dimen/slider_margin"
         android:stepSize="1.0"
         android:value="0.0"
         android:valueFrom="-100.0"
         android:valueTo="100.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.475" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_gravity="center"
+        android:text="@string/start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brightnessSlider"
-        app:layout_constraintVertical_bias="0.0" />
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="261dp"
-        android:layout_height="30dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/Grain_factor"
-        android:textAlignment="gravity"
-        android:textColor="#0B0A0A"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/grainSlider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.373"
-        app:layout_constraintStart_toStartOf="parent" />
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="261dp"
-        android:layout_height="30dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/Brightness_factor"
-        android:textAlignment="gravity"
-        android:textColor="#0B0A0A"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/brightnessSlider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.373"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/brightnessSlider" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

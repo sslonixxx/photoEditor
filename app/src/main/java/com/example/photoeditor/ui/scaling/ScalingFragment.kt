@@ -30,7 +30,6 @@ class ScalingFragment : Fragment() {
         return root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,7 +37,6 @@ class ScalingFragment : Fragment() {
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
 
         val originalImage = imageView.drawable
-        var currentImage: Drawable? = null
 
         val slider = binding.slider
         val button = binding.scalingButton
@@ -68,21 +66,10 @@ class ScalingFragment : Fragment() {
                 savedImage = newImage;
                 imageView.setImageBitmap(savedImage)
             }
-            currentImage = imageView.drawable
 
         }
-        compareButton.setOnTouchListener { view, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    imageView.setImageDrawable(originalImage)
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    imageView.setImageDrawable(currentImage)
-
-                }
-            }
-            true
+        compareButton.setOnClickListener {
+            imageView.setImageDrawable(originalImage);
         }
     }
 

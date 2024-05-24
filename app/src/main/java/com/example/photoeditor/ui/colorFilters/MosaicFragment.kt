@@ -44,7 +44,6 @@ class MosaicFragment : Fragment() {
         spinner = activity?.findViewById(R.id.progressBar1)!!
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
         val userImage = imageView.drawable
-        currentImage = imageView.drawable
         val mosaicFilter = MosaicFilter()
         val slider = binding.sizeOfBrushSlider
         var mosaicFactor = 1 // Initializing with 1 to avoid division by zero
@@ -68,16 +67,8 @@ class MosaicFragment : Fragment() {
                 }
             }
         }
-        compareButton.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    imageView.setImageDrawable(userImage)
-                }
-                MotionEvent.ACTION_UP -> {
-                    imageView.setImageDrawable(currentImage)
-                }
-            }
-            true
+        compareButton.setOnClickListener {
+            imageView.setImageDrawable(userImage);
         }
     }
 
