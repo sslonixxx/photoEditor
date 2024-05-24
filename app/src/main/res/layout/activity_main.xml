@@ -21,8 +21,8 @@
             android:id="@+id/importButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/activity_margin"
+            android:layout_marginTop="@dimen/activity_margin"
             android:background="@color/star_white"
             android:src="@drawable/btn_add"
             android:contentDescription="@string/button_import"
@@ -33,10 +33,10 @@
 
         <ProgressBar
             android:id="@+id/progressBar1"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
             android:visibility="gone"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/activity_margin"
             android:indeterminateTint="@color/woodsmoke"
             app:flow_horizontalAlign="center"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,28 +45,29 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:id="@+id/compareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/star_white"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:layout_marginEnd="@dimen/activity_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/saveButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/btn_turn_left" />
+
+        <ImageButton
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:layout_marginEnd="@dimen/activity_margin"
             android:background="@color/star_white"
             android:src="@drawable/btn_save"
             android:contentDescription="@string/button_save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/compareButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/saveButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/devices_fold" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,8 +85,7 @@
         android:id="@+id/nav_host_fragment_activity_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="8dp"
+        android:layout_height="@dimen/fragment_height"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/bestRecycler"
         app:layout_constraintEnd_toEndOf="parent"

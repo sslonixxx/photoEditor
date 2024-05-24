@@ -57,6 +57,7 @@ class RecognizeFragment : Fragment() {
         imageView = activity?.findViewById(R.id.imageView)!!
         spinner = activity?.findViewById(R.id.progressBar1)!!
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+        val initialImage = imageView.drawable
 
         binding.recognizeButton.setOnClickListener {
             val drawable = imageView.drawable
@@ -81,6 +82,9 @@ class RecognizeFragment : Fragment() {
                 Toast.makeText(activity, "Image not set or invalid image format",
                     Toast.LENGTH_SHORT).show()
             }
+        }
+        compareButton.setOnClickListener{
+            imageView.setImageDrawable(initialImage)
         }
     }
 

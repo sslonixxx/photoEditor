@@ -7,9 +7,10 @@ import com.example.photoeditor.R
 import com.example.photoeditor.databinding.ItemFilterBinding
 import com.example.photoeditor.recyclerView.adapter.model.FilterEntity
 
-class FilterAdapter(private val onButtonClick: (Int) -> Unit) : RecyclerView.Adapter<FilterAdapter.FilterViewHolder>() {
+class FilterAdapter(private val onButtonClick: (Int) -> Unit) :
+    RecyclerView.Adapter<FilterAdapter.FilterViewHolder>() {
     var data: List<FilterEntity> = emptyList()
-    //var selectedPosition = RecyclerView.NO_POSITION
+        //var selectedPosition = RecyclerView.NO_POSITION
         set(newValue) {
             field = newValue
             notifyDataSetChanged()
@@ -24,10 +25,10 @@ class FilterAdapter(private val onButtonClick: (Int) -> Unit) : RecyclerView.Ada
         return FilterViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = data.size // Количество элементов в списке данных
+    override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: FilterViewHolder, position: Int) {
-        val filter = data[position] // Получение фильтра из списка данных по позиции
+        val filter = data[position]
 
         with(holder.binding) {
             val filterNameResId = when (position) {
@@ -35,17 +36,17 @@ class FilterAdapter(private val onButtonClick: (Int) -> Unit) : RecyclerView.Ada
                 1 -> R.string.color_filters
                 2 -> R.string.scaling
                 3 -> R.string.recognize
-                4 -> R.string.vector_editor
-                5 -> R.string.retouching
-                6 -> R.string.unsharp_mask
+                4 -> R.string.retouching
+                5 -> R.string.unsharp_mask
+                6 -> R.string.vector_editor
                 7 -> R.string.affine_transform
                 8 -> R.string.cube3d
-                else -> R.string.default_filter_name // По умолчанию
+                else -> R.string.default_filter_name
             }
             val filterName = holder.itemView.context.getString(filterNameResId)
-            nameTextView.text = filterName // Отрисовка названия
+            nameTextView.text = filterName
             imageView.setImageResource(filter.image)
-            root.setOnClickListener{
+            root.setOnClickListener {
                 onButtonClick(position)
             }
         }

@@ -10,46 +10,61 @@
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textAlignment="gravity"
         android:text="@string/amount"
-        android:textColor="@color/woodsmoke" />
+        android:textAlignment="gravity"
+        android:textColor="@color/woodsmoke"
+        android:textSize="@dimen/text_size"
+        android:layout_marginStart="@dimen/text_margin"
+        app:layout_constraintBottom_toTopOf="@+id/slider1" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/slider1"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:stepSize="0.1"
         android:valueFrom="0.0"
         android:valueTo="2.0"
-        android:thumb="@drawable/heart"
-        app:thumbTint="@color/woodsmoke"/>
+        android:layout_marginStart="@dimen/slider_margin"
+        android:layout_marginEnd="@dimen/slider_margin"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:thumbTint="@color/woodsmoke" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textAlignment="gravity"
         android:text="@string/radius"
-        android:textColor="@color/woodsmoke" />
+        android:textAlignment="gravity"
+        android:textColor="@color/woodsmoke"
+        android:textSize="@dimen/text_size"
+        android:layout_marginStart="@dimen/text_margin"
+        app:layout_constraintBottom_toTopOf="@+id/slider2" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/slider2"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:stepSize="1"
         android:valueFrom="0"
         android:valueTo="10"
-        android:thumb="@drawable/heart"
-        app:thumbTint="@color/woodsmoke"/>
+        android:layout_marginStart="@dimen/slider_margin"
+        android:layout_marginEnd="@dimen/slider_margin"
+        app:layout_constraintBottom_toTopOf="@+id/applyButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:thumbTint="@color/woodsmoke" />
 
     <Button
         android:id="@+id/applyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:text="Apply Unsharp Mask" />
+        android:text="@string/unsharpButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/slider1"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </LinearLayout>
