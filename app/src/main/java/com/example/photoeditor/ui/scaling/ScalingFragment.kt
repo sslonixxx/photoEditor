@@ -12,14 +12,10 @@ import androidx.fragment.app.Fragment
 import com.example.photoeditor.R
 import com.example.photoeditor.databinding.FragmentScalingBinding
 
-
 @Suppress("DEPRECATION")
 class ScalingFragment : Fragment() {
 
     private var _binding: FragmentScalingBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     lateinit var imageView: ImageView
     override fun onCreateView(
@@ -31,7 +27,6 @@ class ScalingFragment : Fragment() {
         _binding = FragmentScalingBinding.inflate(inflater, container, false)
         val root: View = binding.root
         imageView = activity?.findViewById(R.id.imageView)!!
-        //val imageView = binding.imageView2;
         val slider = binding.slider
         val button = binding.scalingButton
         imageView.setDrawingCacheEnabled(true)
@@ -53,120 +48,148 @@ class ScalingFragment : Fragment() {
                 savedImage = bilinearInterpolation(newImage, k)
                 imageView.setImageBitmap(savedImage)
 
-            }
-            else if (k < 1) {
+            } else if (k < 1) {
                 savedImage = trilinearInterpolation(newImage, k)
                 imageView.setImageBitmap(savedImage)
-            }
-            else{
+            } else {
                 savedImage = newImage;
                 imageView.setImageBitmap(savedImage)
             }
 
         }
-
         return root
     }
 
     fun bilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
-        val pixels = IntArray(bitmap.width * bitmap.height)
-        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        val width = bitmap.width
+        val height = bitmap.height
+        val newWidth = (width * k).toInt()
+        val newHeight = (height * k).toInt()
+        val resultBitmap = Bitmap.createBitmap(
+            newWidth,
+            newHeight,
+            Bitmap.Config.ARGB_8888
+        ) // новый Bitmap, куда мы будем записывать результаты интерполяции
 
-        val newWidth = (bitmap.width * k).toInt()
-        val newHeight = (bitmap.height * k).toInt()
-        val newImageArray = IntArray(newWidth * newHeight)
+        val pixels = IntArray(width * height)
+        bitmap.getPixels(
+            pixels,
+            0,
+            width,
+            0,
+            0,
+            width,
+            height
+        ) //массив, содержащий пиксели исходного изображения
 
-        val proportionByX = (bitmap.width - 1).toDouble() / newWidth
-        val proportionByY = (bitmap.height - 1).toDouble() / newHeight
+        for (y in 0 until newHeight) { //Внешний цикл проходит по каждой строке пикселей в новом изображении
+            val srcY = y / k
+            val yFloor = srcY.toInt() //левый пиксель в квадрате 2x2
+            val yCeil = (srcY + 1).toInt()
+                .coerceAtMost(height - 1) // координаты соседних пикселей, которые составляют квадрат 2x2
+            val yWeight =
+                srcY - yFloor //дробные части координат, которые будут использоваться в весовых коэффициентах для интерполяции
 
-        var newIndex = 0
-        var index: Int
+            for (x in 0 until newWidth) { //Внутренний цикл проходит по каждому столбцу пикселей в новом изображении
+                val srcX = x / k
+                val xFloor = srcX.toInt() //левый пиксель в квадрате 2x2
+                val xCeil = (srcX + 1).toInt()
+                    .coerceAtMost(width - 1) // координаты соседних пикселей, которые составляют квадрат 2x2
+                val xWeight =
+                    srcX - xFloor //дробные части координат, которые будут использоваться в весовых коэффициентах для интерполяции
 
-        for (i in 0 until newHeight) {
-            for (j in 0 until newWidth) {
-                val x = (proportionByX * j).toInt()
-                val y = (proportionByY * i).toInt()
+                //четыре пикселя из исходного изображения, которые окружают координаты (srcX, srcY)
+                val p1 = pixels[yFloor * width + xFloor]
+                val p2 = pixels[yFloor * width + xCeil]
+                val p3 = pixels[yCeil * width + xFloor]
+                val p4 = pixels[yCeil * width + xCeil]
 
-                val newX = proportionByX * j - x
-                val newY = proportionByY * i - y
+                val blue = (Color.blue(p1) * (1 - xWeight) * (1 - yWeight) +
+                        Color.blue(p2) * xWeight * (1 - yWeight) +
+                        Color.blue(p3) * (1 - xWeight) * yWeight +
+                        Color.blue(p4) * xWeight * yWeight).toInt()
 
-                index = y * bitmap.width + x
-                val p1 = pixels[index]
-                val p2 = pixels[index + 1]
-                val p3 = pixels[index + bitmap.width]
-                val p4 = pixels[index + bitmap.width + 1]
+                val green = (Color.green(p1) * (1 - xWeight) * (1 - yWeight) +
+                        Color.green(p2) * xWeight * (1 - yWeight) +
+                        Color.green(p3) * (1 - xWeight) * yWeight +
+                        Color.green(p4) * xWeight * yWeight).toInt()
 
-                val d1 = (1 - newX) * (1 - newY)
-                val d2 = newX * (1 - newY)
-                val d3 = (1 - newX) * newY
-                val d4 = newX * newY
+                val red = (Color.red(p1) * (1 - xWeight) * (1 - yWeight) +
+                        Color.red(p2) * xWeight * (1 - yWeight) +
+                        Color.red(p3) * (1 - xWeight) * yWeight +
+                        Color.red(p4) * xWeight * yWeight).toInt()
 
-                val blue = (p1 and 0xff) * d1 + (p2 and 0xff) * d2 + (p3 and 0xff) * d3 + (p4 and 0xff) * d4
-                val green = (p1 shr 8 and 0xff) * d1 + (p2 shr 8 and 0xff) * d2 + (p3 shr 8 and 0xff) * d3 + (p4 shr 8 and 0xff) * d4
-                val red = (p1 shr 16 and 0xff) * d1 + (p2 shr 16 and 0xff) * d2 + (p3 shr 16 and 0xff) * d3 + (p4 shr 16 and 0xff) * d4
-
-                newImageArray[newIndex++] = Color.rgb(red.toInt(), green.toInt(), blue.toInt())
+                resultBitmap.setPixel(
+                    x,
+                    y,
+                    Color.rgb(red, green, blue)
+                ) //Установка нового цвета пикселя
             }
         }
-        return Bitmap.createBitmap(newImageArray, newWidth, newHeight, Bitmap.Config.ARGB_8888)
+
+        return resultBitmap
     }
-    fun trilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
-        var largerScale = 1.0
-        while (k < largerScale / 2) {
-            largerScale /= 2
+
+    fun generateMipmaps(bitmap: Bitmap): List<Bitmap> {
+        val mipmaps = mutableListOf<Bitmap>() // список для хранения всех уровней mipmaps
+        var currentBitmap = bitmap // текущее изображение, начиная с исходного
+
+        mipmaps.add(currentBitmap)
+        while (currentBitmap.width > 1 && currentBitmap.height > 1) { //создаем уменьшенные версии currentBitmap и добавляем их в список mipmaps, пока не дойдем до 1х1
+            val newWidth = currentBitmap.width / 2
+            val newHeight = currentBitmap.height / 2
+            val resizedBitmap = Bitmap.createScaledBitmap(currentBitmap, newWidth, newHeight, true)
+            mipmaps.add(resizedBitmap)
+            currentBitmap = resizedBitmap
         }
-        val smallerScale = largerScale / 2
 
-        val largerBitmap = bilinearInterpolation(bitmap, largerScale.toFloat())
-        val smallerBitmap = bilinearInterpolation(bitmap, smallerScale.toFloat())
+        return mipmaps
+    }
 
-        val largerBitmapPixels = IntArray(largerBitmap.width * largerBitmap.height)
-        val smallerBitmapPixels = IntArray(smallerBitmap.width * smallerBitmap.height)
-        largerBitmap.getPixels(largerBitmapPixels, 0, largerBitmap.width, 0, 0, largerBitmap.width, largerBitmap.height)
-        smallerBitmap.getPixels(smallerBitmapPixels, 0, smallerBitmap.width, 0, 0, smallerBitmap.width, smallerBitmap.height)
+    fun trilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
+        // Генерация mipmap
+        val mipmaps = generateMipmaps(bitmap)
+
+        // Определение уровня детализации (LOD)
+        val mipLevel = (Math.log(k.toDouble()) / Math.log(2.0)).toFloat()
+            .coerceIn(0.0f, (mipmaps.size - 1).toFloat())
+        val level1 = mipLevel.toInt() //выбираются два ближайших уровня mipmaps
+        val level2 = (level1 + 1).coerceAtMost(mipmaps.size - 1)
+
+        val alpha = mipLevel - level1 //весовой коэф
+
+        //билинейная интерполяции для двух уровней mipmap
+        val scaledBitmap1 = bilinearInterpolation(mipmaps[level1], k / (1 shl level1))
+        val scaledBitmap2 = bilinearInterpolation(mipmaps[level2], k / (1 shl level2))
 
         val newWidth = (bitmap.width * k).toInt()
         val newHeight = (bitmap.height * k).toInt()
-        val newBitmapPixels = IntArray(newWidth * newHeight)
-        var pixelIndex = 0
+        val resultBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
 
-        for (x in 0 until newWidth) {
-            for (y in 0 until newHeight) {
-                val largerX = ((x / k).toInt() * largerScale).toInt()
-                val largerY = ((y / k).toInt() * largerScale).toInt()
+        for (y in 0 until newHeight) {
+            for (x in 0 until newWidth) {
+                // получаем цветовое значение пикселя из двух интерполированных изображений
+                val color1 = scaledBitmap1.getPixel(
+                    x.coerceIn(0, scaledBitmap1.width - 1),
+                    y.coerceIn(0, scaledBitmap1.height - 1)
+                )
+                val color2 = scaledBitmap2.getPixel(
+                    x.coerceIn(0, scaledBitmap2.width - 1),
+                    y.coerceIn(0, scaledBitmap2.height - 1)
+                )
 
-                val smallerX = ((x / k).toInt() * smallerScale).toInt()
-                val smallerY = ((y / k).toInt() * smallerScale).toInt()
+                // Интерполяция цветовых каналов
+                val red = (Color.red(color1) * (1 - alpha) + Color.red(color2) * alpha).toInt()
+                val green =
+                    (Color.green(color1) * (1 - alpha) + Color.green(color2) * alpha).toInt()
+                val blue = (Color.blue(color1) * (1 - alpha) + Color.blue(color2) * alpha).toInt()
 
-                val largerIndex = (largerX * largerBitmap.height + largerY)
-                val smallerIndex = (smallerX * smallerBitmap.height + smallerY)
-
-                var pixelLarger = 0
-                var pixelSmaller = 0
-                try {
-                    pixelLarger = largerBitmapPixels[largerIndex]
-                    pixelSmaller = smallerBitmapPixels[smallerIndex]
-                } catch (e: Exception) {
-                    pixelLarger = largerBitmapPixels[largerIndex - 1]
-                    pixelSmaller = smallerBitmapPixels[smallerIndex - 1]
-                }
-
-                val redLarger = Color.red(pixelLarger)
-                val greenLarger = Color.green(pixelLarger)
-                val blueLarger = Color.blue(pixelLarger)
-
-                val redSmaller = Color.red(pixelSmaller)
-                val greenSmaller = Color.green(pixelSmaller)
-                val blueSmaller = Color.blue(pixelSmaller)
-
-                val red = (redLarger * (1 / smallerScale - k) + redSmaller * (k - (1 / largerScale))) / (1 / largerScale)
-                val green = (greenLarger * (1 / smallerScale - k) + greenSmaller * (k - (1 / largerScale))) / (1 / largerScale)
-                val blue = (blueLarger * (1 / smallerScale - k) + blueSmaller * (k - (1 / largerScale))) / (1 / largerScale)
-
-                newBitmapPixels[pixelIndex++] = Color.rgb(red.toInt(), green.toInt(), blue.toInt())
+                // Установка нового цвета пикселя
+                resultBitmap.setPixel(x, y, Color.rgb(red, green, blue))
             }
         }
-        return Bitmap.createBitmap(newBitmapPixels, newWidth, newHeight, Bitmap.Config.ARGB_8888)
+
+        return resultBitmap
     }
 
     override fun onDestroyView() {

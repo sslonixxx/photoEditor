@@ -7,11 +7,11 @@ import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
 import android.app.Activity
 import android.content.ContentValues
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.View.MeasureSpec
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -46,20 +46,21 @@ class MainActivity : AppCompatActivity() {
 
         val startForProfileImageResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                val resultCode = result.resultCode
-                val data = result.data
-
-                if (resultCode == Activity.RESULT_OK) {
-                    val fileUri = data?.data!!
-
-                    imageView.setImageURI(fileUri)
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val imageUri = result.data?.data
+                    imageUri?.let { uri ->
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                        val resolutionText = "Resolution: ${bitmap.width}x${bitmap.height}"
+                        Toast.makeText(this@MainActivity, resolutionText, Toast.LENGTH_SHORT).show()
+                        imageView.setImageURI(uri)
+                    }
                 }
             }
 
         binding.importButton.setOnClickListener {
             ImagePicker.with(this)
                 .crop()
-                .compress(1024)
+                .compress(2161)
                 .maxResultSize(1080, 1080)
                 .createIntent { intent ->
                     startForProfileImageResult.launch(intent)
@@ -67,17 +68,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-            imageView.isDrawingCacheEnabled = true
-            imageView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
-            imageView.layout(0, 0, imageView.measuredWidth, imageView.measuredHeight)
-            imageView.buildDrawingCache(true)
-            val newImage = Bitmap.createBitmap(imageView.drawingCache)
-            imageView.isDrawingCacheEnabled = false
-
-            saveImageToGallery(newImage)
-            //imageView.setImageBitmap(newImage)
+            val bitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            imageView.draw(canvas)
+            saveImageToGallery(bitmap)
         }
+
     }
 
     private fun setupRecyclerView(navController: NavController) {
@@ -104,38 +100,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveImageToGallery(bitmap: Bitmap) {
-        val resolver =
-            contentResolver // получает экземпляр ContentResolver для текущего контекста приложения
-        val fileName =
-            System.currentTimeMillis().toString() + ".png" // имя файла из даты времени и пнг
+        val resolver = contentResolver
+        val fileName = System.currentTimeMillis().toString() + ".png"
 
-        // хранилище мультимедийных файлов андроид медиастор
-        val contentValues = ContentValues().apply {// контейнер для хранения пар ключ-значение
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName) // имя файла
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/png") // тип файла
-            // для андроида >= 10
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val resolutionText = "Resolution: ${bitmap.width}x${bitmap.height}"
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
             }
         }
-        // вставляет новый файл в систему хранения файлов андроид
+
         val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
         try {
-            imageUri?.let { // если ури не нулл
+            imageUri?.let {
                 resolver.openOutputStream(it)?.use { outputStream ->
-                    bitmap.compress(
-                        Bitmap.CompressFormat.PNG,
-                        100,
-                        outputStream
-                    ) // запись данных изображения в поток для записи данных в новый файл
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 }
                 Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resolutionText, Toast.LENGTH_SHORT).show() // Добавляем текст с разрешением
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
+
+
+
+
 
     private fun getPermission() {
         val requestPermissions =
