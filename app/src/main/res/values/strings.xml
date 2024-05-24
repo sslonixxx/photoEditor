@@ -33,6 +33,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="slider">slider</string>
     <string name="scale">scale</string>
-    <string name="scaling_factor">Scaling factor</string>
-    <string name="angle">Angle</string>
+    <string name="scaling_factor">Scaling factor:</string>
+    <string name="angle">Angle:</string>
 </resources>
