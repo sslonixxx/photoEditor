@@ -9,14 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.example.photoeditor.R
-import com.example.photoeditor.databinding.FragmentFiltersBinding
 import com.example.photoeditor.databinding.FragmentMosaicBinding
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MosaicFragment : Fragment() {
     private var _binding: FragmentMosaicBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
+    private var spinner: ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,27 +33,39 @@ class MosaicFragment : Fragment() {
     ): View? {
         _binding = FragmentMosaicBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
+        spinner = activity?.findViewById(R.id.progressBar1)!!
         val mosaicFilter = MosaicFilter()
-        var slider = binding.sizeOfBrushSlider // Обратите внимание на правильный ID для Slider
-        var mosaicFactor=0
+        val slider = binding.sizeOfBrushSlider
+        var mosaicFactor = 1 // Initializing with 1 to avoid division by zero
 
-        slider.addOnChangeListener { slider, value, fromUser ->
-            mosaicFactor = value.toInt() + 1 // Добавляем 1, чтобы избежать деления на ноль
+        slider.addOnChangeListener { _, value, _ ->
+            mosaicFactor = value.toInt() + 1 // Adding 1 to avoid division by zero
         }
+
         val originalBitmap = mosaicFilter.getBitmapFromImageView(imageView)
 
-        binding.start.setOnClickListener{
+        binding.start.setOnClickListener {
             if (originalBitmap != null) {
-                val mosaicBitmap = mosaicFilter.createMosaicBitmap(originalBitmap, mosaicFactor)
-                imageView.setImageBitmap(mosaicBitmap)
+                spinner?.visibility = View.VISIBLE
+                lifecycleScope.launch {
+                    val mosaicBitmap = withContext(Dispatchers.Default) {
+                        mosaicFilter.createMosaicBitmap(originalBitmap, mosaicFactor)
+                    }
+                    imageView.setImageBitmap(mosaicBitmap)
+                    spinner?.visibility = View.GONE
+                }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     class MosaicFilter {
@@ -60,6 +77,7 @@ class MosaicFragment : Fragment() {
                 null
             }
         }
+
         fun createMosaicBitmap(original: Bitmap, factor: Int): Bitmap {
             val width = original.width
             val height = original.height

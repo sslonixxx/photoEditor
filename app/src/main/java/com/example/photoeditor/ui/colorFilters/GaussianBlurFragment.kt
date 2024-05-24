@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.example.photoeditor.R
 import com.example.photoeditor.databinding.FragmentGaussianBlurBinding
 import kotlin.math.exp
@@ -21,6 +22,7 @@ class GaussianBlurFragment : Fragment() {
     private var _binding: FragmentGaussianBlurBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
+    private var spinner: ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class GaussianBlurFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
+        spinner = activity?.findViewById(R.id.progressBar1)!!
         val gaussianBlurFilter = GaussingBlurFilter()
         var slider = binding.radiusSlider
         var radius=0
@@ -48,12 +51,14 @@ class GaussianBlurFragment : Fragment() {
         val originalBitmap = gaussianBlurFilter.getBitmapFromImageView(imageView)
 
         binding.start.setOnClickListener{
+            spinner?.visibility = View.VISIBLE
             lifecycleScope.launch {
                 if (originalBitmap != null) {
                     val blurredBitmap = withContext(Dispatchers.Default) {
                         gaussianBlurFilter.applyGaussianBlur(originalBitmap, radius)
                     }
                     imageView.setImageBitmap(blurredBitmap)
+                    spinner?.visibility = View.GONE
                 }
             }
         }

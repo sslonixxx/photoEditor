@@ -10,9 +10,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.photoeditor.R
 import com.example.photoeditor.databinding.FragmentFiltersBinding
+import android.widget.ProgressBar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ColorFiltersFragment : Fragment() {
     private var _binding: FragmentFiltersBinding? = null
@@ -20,6 +25,7 @@ class ColorFiltersFragment : Fragment() {
     private lateinit var imageView: ImageView
     private var originalBitmap: Bitmap? = null
     private var isBWFilterApplied = false
+    private var spinner: ProgressBar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +38,7 @@ class ColorFiltersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
+        spinner = activity?.findViewById(R.id.progressBar1)!!
 
         originalBitmap = (imageView.drawable as BitmapDrawable).bitmap
 
@@ -57,9 +64,16 @@ class ColorFiltersFragment : Fragment() {
             imageView.setImageBitmap(originalBitmap)
             isBWFilterApplied = false
         } else {
-            val blackAndWhiteFilter = BlackAndWhite()
-            blackAndWhiteFilter.setImageViewWithBWFilter(imageView)
-            isBWFilterApplied = true
+            spinner?.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                val blackAndWhiteFilter = BlackAndWhite()
+                val bwBitmap = withContext(Dispatchers.Default) {
+                    blackAndWhiteFilter.applyBlackAndWhiteFilter(originalBitmap!!)
+                }
+                imageView.setImageBitmap(bwBitmap)
+                spinner?.visibility = View.GONE
+                isBWFilterApplied = true
+            }
         }
     }
 
@@ -83,13 +97,6 @@ class ColorFiltersFragment : Fragment() {
                 }
             }
             return bwBitmap
-        }
-
-        fun setImageViewWithBWFilter(imageView: ImageView) {
-            val drawable = imageView.drawable as BitmapDrawable
-            val originalBitmap = drawable.bitmap
-            val bwBitmap = applyBlackAndWhiteFilter(originalBitmap)
-            imageView.setImageBitmap(bwBitmap)
         }
     }
 }

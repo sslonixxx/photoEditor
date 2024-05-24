@@ -16,11 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.widget.ProgressBar
 
 class NoirFragment : Fragment() {
     private var _binding: FragmentNoirBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
+    private var spinner: ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class NoirFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
+        spinner = activity?.findViewById(R.id.progressBar1)!!
         val noirFilter= NoirFilter()
         val grainSlider = binding.grainSlider
         val brightnessSlider = binding.brightnessSlider
@@ -55,12 +58,14 @@ class NoirFragment : Fragment() {
         val originalBitmap = getBitmapFromImageView(imageView)
 
         binding.start.setOnClickListener{
+            spinner?.visibility = View.VISIBLE
             lifecycleScope.launch {
                 if (originalBitmap != null) {
                     val noirBitmap = withContext(Dispatchers.Default) {
                         noirFilter.applyNoirFilter(originalBitmap, grainLevel, brightness)
                     }
                     imageView.setImageBitmap(noirBitmap)
+                    spinner?.visibility = View.GONE
                 }
             }
     }

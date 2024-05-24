@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.example.photoeditor.R
 import com.example.photoeditor.databinding.FragmentWarmBinding
-import kotlin.math.exp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +21,7 @@ class WarmFragment : Fragment() {
     private var _binding: FragmentWarmBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
+    private var spinner: ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,31 +33,39 @@ class WarmFragment : Fragment() {
     ): View? {
         _binding = FragmentWarmBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
+        spinner = activity?.findViewById(R.id.progressBar1)!!
+
         val warmFilter = WarmFilter()
-        var slider = binding.warmSlider
+        val slider = binding.warmSlider
         var warmValue = 0
 
         val originalBitmap = warmFilter.getBitmapFromImageView(imageView)
 
         slider.addOnChangeListener { slider, value, fromUser ->
             warmValue = value.toInt()
+            spinner?.visibility = View.VISIBLE
             lifecycleScope.launch {
                 if (originalBitmap != null) {
                     val warmBitmap = withContext(Dispatchers.Default) {
+
                         warmFilter.applyWarmFilter(originalBitmap, warmValue)
                     }
                     imageView.setImageBitmap(warmBitmap)
+                    spinner?.visibility = View.GONE
                 }
             }
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     class WarmFilter {
         fun getBitmapFromImageView(imageView: ImageView): Bitmap? {

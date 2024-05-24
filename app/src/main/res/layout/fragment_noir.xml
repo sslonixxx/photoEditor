@@ -9,7 +9,9 @@
     <com.google.android.material.slider.Slider
         android:id="@+id/grainSlider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:stepSize="1.0"
         android:valueFrom="0.0"
         android:valueTo="100.0"
@@ -23,7 +25,9 @@
     <com.google.android.material.slider.Slider
         android:id="@+id/brightnessSlider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:stepSize="1.0"
         android:value="0.0"
         android:valueFrom="-100.0"
@@ -45,6 +49,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/brightnessSlider"
         app:layout_constraintVertical_bias="0.0" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="261dp"
+        android:layout_height="30dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/Grain_factor"
+        android:textAlignment="gravity"
+        android:textColor="#0B0A0A"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/grainSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.373"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="261dp"
+        android:layout_height="30dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/Brightness_factor"
+        android:textAlignment="gravity"
+        android:textColor="#0B0A0A"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/brightnessSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.373"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

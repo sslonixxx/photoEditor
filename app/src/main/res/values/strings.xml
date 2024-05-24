@@ -32,4 +32,10 @@
     <string name="importButton">import</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="slider">slider</string>
+    <string name="Mosaic_factor">Mosaic factor</string>
+    <string name="Grain_factor">Grain factor</string>
+    <string name="Retouching_factor">Retouching factor</string>
+    <string name="Size_of_brush">Size of brush</string>
+    <string name="Brightness_factor">Brightness factor</string>
+    <string name="Warm_factor">Warm factor</string>
 </resources>

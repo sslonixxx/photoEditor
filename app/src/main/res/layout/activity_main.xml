@@ -31,33 +31,18 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="DuplicateClickableBoundsCheck" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/saveButton"
-            app:layout_constraintStart_toEndOf="@+id/importButton">
-
-            <ImageButton
-                android:id="@+id/turnLeftButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/star_white"
-                android:contentDescription="@string/turn_left"
-                android:src="@drawable/btn_turn_left" />
-
-            <ImageButton
-                android:id="@+id/turnRightButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/star_white"
-                android:contentDescription="@string/turn_right"
-                android:src="@drawable/btn_turn_right" />
-        </LinearLayout>
-
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:indeterminateTint="@color/woodsmoke"
+            app:flow_horizontalAlign="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/saveButton"
@@ -83,8 +68,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
         tools:srcCompat="@tools:sample/avatars" />
-
-
 
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"
