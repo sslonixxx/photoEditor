@@ -12,6 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">@font/kudry_font</item>
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
 </resources>

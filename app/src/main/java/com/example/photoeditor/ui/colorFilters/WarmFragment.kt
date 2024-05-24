@@ -72,6 +72,7 @@ class WarmFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     imageView.setImageDrawable(userImage)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     imageView.setImageDrawable(currentImage)
                 }
@@ -95,13 +96,13 @@ class WarmFragment : Fragment() {
             }
         }
 
-        fun applyWarmFilter(src: Bitmap, warmth: Int): Bitmap {
+        fun applyWarmFilter(src: Bitmap, warm: Int): Bitmap {
             val width = src.width
             val height = src.height
             val result = Bitmap.createBitmap(width, height, src.config)
 
-            val redScale = 1 + (warmth / 100.0)
-            val blueScale = 1 - (warmth / 100.0)
+            val redScale = 1 + (warm / 100.0)
+            val blueScale = 1 - (warm / 100.0)
 
             for (x in 0 until width) {
                 for (y in 0 until height) {

@@ -29,6 +29,7 @@ class NoirFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,6 +79,7 @@ class NoirFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     imageView.setImageDrawable(userImage)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     imageView.setImageDrawable(currentImage)
                 }
@@ -85,10 +87,12 @@ class NoirFragment : Fragment() {
             true
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     private fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
         return if (imageView.drawable != null) {
             val drawable = imageView.drawable as BitmapDrawable
@@ -98,6 +102,7 @@ class NoirFragment : Fragment() {
         }
     }
 }
+
 class NoirFilter {
     fun applyNoirFilter(src: Bitmap, grainLevel: Int, brightness: Int): Bitmap {
         val width = src.width

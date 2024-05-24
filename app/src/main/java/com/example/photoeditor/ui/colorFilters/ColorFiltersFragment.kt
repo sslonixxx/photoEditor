@@ -48,7 +48,8 @@ class ColorFiltersFragment : Fragment() {
         val userImage = imageView.drawable
         currentImage = imageView.drawable
 
-        originalBitmap = (imageView.drawable as BitmapDrawable).bitmap
+        originalBitmap = (imageView.drawable as? BitmapDrawable)?.bitmap
+
 
         binding.blackAndWhite.setOnClickListener {
             toggleBWFilter()
@@ -56,13 +57,13 @@ class ColorFiltersFragment : Fragment() {
         binding.mosaic.setOnClickListener {
             findNavController().navigate(R.id.mosaicFragment)
         }
-        binding.gaussingBlurFilter.setOnClickListener{
+        binding.gaussingBlurFilter.setOnClickListener {
             findNavController().navigate(R.id.gaussianBlurFragment)
         }
-        binding.noir.setOnClickListener{
+        binding.noir.setOnClickListener {
             findNavController().navigate(R.id.noirFragment)
         }
-        binding.warm.setOnClickListener{
+        binding.warm.setOnClickListener {
             findNavController().navigate(R.id.warmFragment)
         }
 
@@ -71,6 +72,7 @@ class ColorFiltersFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     imageView.setImageDrawable(userImage)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     imageView.setImageDrawable(currentImage)
                 }
@@ -104,6 +106,7 @@ class ColorFiltersFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     class BlackAndWhite {
         fun applyBlackAndWhiteFilter(original: Bitmap): Bitmap {
             val bwBitmap = Bitmap.createBitmap(original.width, original.height, original.config)

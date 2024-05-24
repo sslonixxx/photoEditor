@@ -55,8 +55,6 @@ class RetouchFragment : Fragment() {
         imageView.setOnTouchListener { _, event ->
             try {
                 val imageMatrix = imageView.imageMatrix
-                val drawable = imageView.drawable
-                val rect = drawable.bounds
                 val transformedPoint = FloatArray(2)
 
                 when (event.action) {
@@ -67,8 +65,15 @@ class RetouchFragment : Fragment() {
                         imageMatrix.mapPoints(transformedPoint)
                         lastX = transformedPoint[0].toInt()
                         lastY = transformedPoint[1].toInt()
+                        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+                        val newBitmap = calculatingAverageColors(
+                            bitmap, lastX, lastY,
+                            sizeOfBrush.toInt(), rateOfRetouching
+                        )
+                        imageView.setImageBitmap(newBitmap)
                         true
                     }
+
                     MotionEvent.ACTION_MOVE -> {
                         transformedPoint[0] = event.x
                         transformedPoint[1] = event.y
@@ -76,18 +81,18 @@ class RetouchFragment : Fragment() {
                         imageMatrix.mapPoints(transformedPoint)
                         val x = transformedPoint[0].toInt()
                         val y = transformedPoint[1].toInt()
-                        val deltaX = x - lastX
-                        val deltaY = y - lastY
-
                         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-                        val newBitmap = calculatingAverageColors(bitmap, x, y,
-                            sizeOfBrush.toInt(), rateOfRetouching)
+                        val newBitmap = calculatingAverageColors(
+                            bitmap, x, y,
+                            sizeOfBrush.toInt(), rateOfRetouching
+                        )
                         imageView.setImageBitmap(newBitmap)
 
                         lastX = x
                         lastY = y
                         true
                     }
+
                     else -> false
                 }
             } catch (e: Exception) {

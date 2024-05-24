@@ -73,6 +73,7 @@ class MosaicFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     imageView.setImageDrawable(userImage)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     imageView.setImageDrawable(currentImage)
                 }

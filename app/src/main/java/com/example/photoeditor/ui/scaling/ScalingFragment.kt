@@ -37,7 +37,7 @@ class ScalingFragment : Fragment() {
         imageView = activity?.findViewById(R.id.imageView)!!
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
 
-        val originalImage = imageView.drawable
+        val originalImage = imageView.drawable ?: return
         var currentImage: Drawable? = null
 
         val slider = binding.slider

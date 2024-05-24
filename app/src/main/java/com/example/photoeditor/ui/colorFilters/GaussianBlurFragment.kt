@@ -73,6 +73,7 @@ class GaussianBlurFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     imageView.setImageDrawable(userImage)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     imageView.setImageDrawable(currentImage)
                 }
@@ -85,6 +86,7 @@ class GaussianBlurFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     class GaussingBlurFilter {
         fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
             return if (imageView.drawable != null) {
@@ -104,15 +106,16 @@ class GaussianBlurFragment : Fragment() {
 
             for (y in -radius..radius) {
                 for (x in -radius..radius) {
-                    val distance = (x * x + y * y).toDouble()
-                    kernel[y + radius][x + radius] = exp(-distance / sigma2) / piSigma2
+                    val distance = (x * x + y * y).toDouble() //расстояние от центра
+                    kernel[y + radius][x + radius] =
+                        exp(-distance / sigma2) / piSigma2 //вычисляем значение ядра по формуле
                     sum += kernel[y + radius][x + radius]
                 }
             }
 
             for (y in 0 until size) {
                 for (x in 0 until size) {
-                    kernel[y][x] /= sum
+                    kernel[y][x] /= sum //нормализуем ядро
                 }
             }
 
