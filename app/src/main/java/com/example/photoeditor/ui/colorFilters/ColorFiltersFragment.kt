@@ -1,10 +1,13 @@
 package com.example.photoeditor.ui.colorFilters
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -26,6 +29,8 @@ class ColorFiltersFragment : Fragment() {
     private var originalBitmap: Bitmap? = null
     private var isBWFilterApplied = false
     private var spinner: ProgressBar? = null
+    private var currentImage: Drawable? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +44,9 @@ class ColorFiltersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
         spinner = activity?.findViewById(R.id.progressBar1)!!
+        val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+        val userImage = imageView.drawable
+        currentImage = imageView.drawable
 
         originalBitmap = (imageView.drawable as BitmapDrawable).bitmap
 
@@ -57,6 +65,18 @@ class ColorFiltersFragment : Fragment() {
         binding.warm.setOnClickListener{
             findNavController().navigate(R.id.warmFragment)
         }
+
+        compareButton.setOnTouchListener { _, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    imageView.setImageDrawable(userImage)
+                }
+                MotionEvent.ACTION_UP -> {
+                    imageView.setImageDrawable(currentImage)
+                }
+            }
+            true
+        }
     }
 
     private fun toggleBWFilter() {
@@ -71,17 +91,19 @@ class ColorFiltersFragment : Fragment() {
                     blackAndWhiteFilter.applyBlackAndWhiteFilter(originalBitmap!!)
                 }
                 imageView.setImageBitmap(bwBitmap)
+                currentImage = imageView.drawable
+
                 spinner?.visibility = View.GONE
                 isBWFilterApplied = true
             }
         }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
     class BlackAndWhite {
         fun applyBlackAndWhiteFilter(original: Bitmap): Bitmap {
             val bwBitmap = Bitmap.createBitmap(original.width, original.height, original.config)

@@ -27,7 +27,7 @@
                 android:contentDescription="Black and White Filter"
                 android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ship2" />
+                android:src="@drawable/black" />
 
             <ImageButton
                 android:id="@+id/mosaic"
@@ -36,7 +36,7 @@
                 android:contentDescription="mosaic"
                 android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ship2" />
+                android:src="@drawable/mosaic" />
 
             <ImageButton
                 android:id="@+id/gaussingBlurFilter"
@@ -45,7 +45,7 @@
                 android:contentDescription="Gaussing Blur Filter"
                 android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ship2"/>
+                android:src="@drawable/gaussin"/>
             <ImageButton
                 android:id="@+id/noir"
                 android:layout_width="90dp"
@@ -53,7 +53,7 @@
                 android:contentDescription="noir"
                 android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ship2"/>
+                android:src="@drawable/noir"/>
             <ImageButton
                 android:id="@+id/warm"
                 android:layout_width="90dp"
@@ -61,7 +61,7 @@
                 android:contentDescription="warm"
                 android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ship2" />
+                android:src="@drawable/warm" />
         </LinearLayout>
 
 

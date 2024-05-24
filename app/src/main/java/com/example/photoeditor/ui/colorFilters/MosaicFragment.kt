@@ -3,9 +3,11 @@ package com.example.photoeditor.ui.colorFilters
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -22,6 +24,7 @@ class MosaicFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
     private var spinner: ProgressBar? = null
+    private var currentImage: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,9 @@ class MosaicFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
         spinner = activity?.findViewById(R.id.progressBar1)!!
+        val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+        val userImage = imageView.drawable
+        currentImage = imageView.drawable
         val mosaicFilter = MosaicFilter()
         val slider = binding.sizeOfBrushSlider
         var mosaicFactor = 1 // Initializing with 1 to avoid division by zero
@@ -57,9 +63,21 @@ class MosaicFragment : Fragment() {
                         mosaicFilter.createMosaicBitmap(originalBitmap, mosaicFactor)
                     }
                     imageView.setImageBitmap(mosaicBitmap)
+                    currentImage = imageView.drawable
                     spinner?.visibility = View.GONE
                 }
             }
+        }
+        compareButton.setOnTouchListener { _, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    imageView.setImageDrawable(userImage)
+                }
+                MotionEvent.ACTION_UP -> {
+                    imageView.setImageDrawable(currentImage)
+                }
+            }
+            true
         }
     }
 

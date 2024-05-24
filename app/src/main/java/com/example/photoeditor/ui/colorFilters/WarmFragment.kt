@@ -3,9 +3,11 @@ package com.example.photoeditor.ui.colorFilters
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -22,6 +24,7 @@ class WarmFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
     private var spinner: ProgressBar? = null
+    private var currentImage: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,9 @@ class WarmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
         spinner = activity?.findViewById(R.id.progressBar1)!!
+        val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+        val userImage = imageView.drawable
+        currentImage = imageView.drawable
 
         val warmFilter = WarmFilter()
         val slider = binding.warmSlider
@@ -56,9 +62,21 @@ class WarmFragment : Fragment() {
                         warmFilter.applyWarmFilter(originalBitmap, warmValue)
                     }
                     imageView.setImageBitmap(warmBitmap)
+                    currentImage = imageView.drawable
                     spinner?.visibility = View.GONE
                 }
             }
+        }
+        compareButton.setOnTouchListener { _, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    imageView.setImageDrawable(userImage)
+                }
+                MotionEvent.ACTION_UP -> {
+                    imageView.setImageDrawable(currentImage)
+                }
+            }
+            true
         }
     }
 
@@ -82,7 +100,6 @@ class WarmFragment : Fragment() {
             val height = src.height
             val result = Bitmap.createBitmap(width, height, src.config)
 
-            // The warmth value will range from -100 to 100
             val redScale = 1 + (warmth / 100.0)
             val blueScale = 1 - (warmth / 100.0)
 
@@ -96,7 +113,6 @@ class WarmFragment : Fragment() {
                     result.setPixel(x, y, Color.rgb(red, green, blue))
                 }
             }
-
             return result
         }
     }

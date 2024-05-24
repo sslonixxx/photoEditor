@@ -3,9 +3,11 @@ package com.example.photoeditor.ui.colorFilters
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -23,6 +25,7 @@ class GaussianBlurFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var imageView: ImageView
     private var spinner: ProgressBar? = null
+    private var currentImage: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,23 +37,25 @@ class GaussianBlurFragment : Fragment() {
     ): View? {
         _binding = FragmentGaussianBlurBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageView = activity?.findViewById(R.id.imageView)!!
         spinner = activity?.findViewById(R.id.progressBar1)!!
+        val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+        val userImage = imageView.drawable
+        currentImage = imageView.drawable
         val gaussianBlurFilter = GaussingBlurFilter()
-        var slider = binding.radiusSlider
-        var radius=0
+        val slider = binding.radiusSlider
+        var radius = 0
 
-        slider.addOnChangeListener { slider, value, fromUser ->
+        slider.addOnChangeListener { _, value, _ ->
             radius = value.toInt()
         }
         val originalBitmap = gaussianBlurFilter.getBitmapFromImageView(imageView)
 
-        binding.start.setOnClickListener{
+        binding.start.setOnClickListener {
             spinner?.visibility = View.VISIBLE
             lifecycleScope.launch {
                 if (originalBitmap != null) {
@@ -59,11 +64,27 @@ class GaussianBlurFragment : Fragment() {
                     }
                     imageView.setImageBitmap(blurredBitmap)
                     spinner?.visibility = View.GONE
+                    currentImage = imageView.drawable
                 }
             }
         }
+        compareButton.setOnTouchListener { _, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    imageView.setImageDrawable(userImage)
+                }
+                MotionEvent.ACTION_UP -> {
+                    imageView.setImageDrawable(currentImage)
+                }
+            }
+            true
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     class GaussingBlurFilter {
         fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
             return if (imageView.drawable != null) {
@@ -74,7 +95,7 @@ class GaussianBlurFragment : Fragment() {
             }
         }
 
-         fun createGaussianKernel(radius: Int, sigma: Double): Array<DoubleArray> {
+        fun createGaussianKernel(radius: Int, sigma: Double): Array<DoubleArray> {
             val size = 2 * radius + 1
             val kernel = Array(size) { DoubleArray(size) }
             val sigma2 = 2 * sigma * sigma
@@ -89,7 +110,6 @@ class GaussianBlurFragment : Fragment() {
                 }
             }
 
-            // Normalize the kernel
             for (y in 0 until size) {
                 for (x in 0 until size) {
                     kernel[y][x] /= sum
@@ -99,7 +119,7 @@ class GaussianBlurFragment : Fragment() {
             return kernel
         }
 
-         fun applyGaussianBlur(src: Bitmap, radius: Int): Bitmap {
+        fun applyGaussianBlur(src: Bitmap, radius: Int): Bitmap {
             val width = src.width
             val height = src.height
             val result = Bitmap.createBitmap(width, height, src.config)
@@ -135,7 +155,5 @@ class GaussianBlurFragment : Fragment() {
 
             return result
         }
-
     }
-
-   }
+}
