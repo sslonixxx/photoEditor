@@ -9,6 +9,7 @@ import com.example.photoeditor.recyclerView.adapter.model.FilterEntity
 
 class FilterAdapter(private val onButtonClick: (Int) -> Unit) : RecyclerView.Adapter<FilterAdapter.FilterViewHolder>() {
     var data: List<FilterEntity> = emptyList()
+    //var selectedPosition = RecyclerView.NO_POSITION
         set(newValue) {
             field = newValue
             notifyDataSetChanged()
