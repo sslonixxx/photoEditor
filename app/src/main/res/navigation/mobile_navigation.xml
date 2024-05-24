@@ -3,23 +3,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
-
+    app:startDestination="@id/emptyFragment">
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.photoeditor.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
+        android:id="@+id/colorFiltersFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.ColorFiltersFragment"
+        android:label="fragment_color_filters"
+        tools:layout="@layout/fragment_filters" />
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.photoeditor.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
+        android:id="@+id/rotationFragment"
+        android:name="com.example.photoeditor.ui.rotation.RotationFragment"
+        android:label="fragment_rotation"
+        tools:layout="@layout/fragment_rotation" />
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.photoeditor.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/affineFragment"
+        android:name="com.example.photoeditor.ui.affineTransform.AffineFragment"
+        android:label="fragment_affine"
+        tools:layout="@layout/fragment_affine" />
+    <fragment
+        android:id="@+id/cubeFragment"
+        android:name="com.example.photoeditor.ui.cube3d.CubeFragment"
+        android:label="fragment_cube"
+        tools:layout="@layout/fragment_cube" />
+    <fragment
+        android:id="@+id/recognizeFragment"
+        android:name="com.example.photoeditor.ui.recognize.RecognizeFragment"
+        android:label="fragment_recognize"
+        tools:layout="@layout/fragment_recognize" />
+    <fragment
+        android:id="@+id/retouchFragment"
+        android:name="com.example.photoeditor.ui.retouch.RetouchFragment"
+        android:label="fragment_retouch"
+        tools:layout="@layout/fragment_retouch" />
+    <fragment
+        android:id="@+id/scalingFragment"
+        android:name="com.example.photoeditor.ui.scaling.ScalingFragment"
+        android:label="fragment_scaling"
+        tools:layout="@layout/fragment_scaling" />
+    <fragment
+        android:id="@+id/unsharpFragment"
+        android:name="com.example.photoeditor.ui.unsharpMask.UnsharpFragment"
+        android:label="fragment_unsharp"
+        tools:layout="@layout/fragment_unsharp" />
+    <fragment
+        android:id="@+id/vectorFragment"
+        android:name="com.example.photoeditor.ui.vectorEditor.VectorFragment"
+        android:label="fragment_vector"
+        tools:layout="@layout/fragment_vector" />
+    <fragment
+        android:id="@+id/emptyFragment"
+        android:name="com.example.photoeditor.ui.EmptyFragment"
+        android:label="fragment_empty"
+        tools:layout="@layout/fragment_empty" />
+    <fragment
+        android:id="@+id/mosaicFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.MosaicFragment"
+        android:label="fragment_mosaic"
+        tools:layout="@layout/fragment_mosaic" />
+    <fragment
+        android:id="@+id/gaussianBlurFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.GaussianBlurFragment"
+        android:label="fragment_gaussian_blur"
+        tools:layout="@layout/fragment_gaussian_blur" />
+    <fragment
+        android:id="@+id/noirFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.NoirFragment"
+        android:label="fragment_noir"
+        tools:layout="@layout/fragment_noir" />
+    <fragment
+        android:id="@+id/warmFragment"
+        android:name="com.example.photoeditor.ui.colorFilters.WarmFragment"
+        android:label="fragment_warm"
+        tools:layout="@layout/fragment_warm" />
 </navigation>

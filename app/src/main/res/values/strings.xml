@@ -3,4 +3,46 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="button_import">Add image</string>
+    <string name="turn_left">Back</string>
+    <string name="turn_right">Forward</string>
+    <string name="button_save">Save</string>
+
+    <!--main buttons-->
+    <string name="rotation">Rotate</string>
+    <string name="color_filters">Filters</string>
+    <string name="scaling">Scaling</string>
+    <string name="recognize">Face RCG</string>
+    <string name="vector_editor">Vector</string>
+    <string name="retouching">Retouch</string>
+    <string name="unsharp_mask">Unsharp</string>
+    <string name="affine_transform">Affine</string>
+    <string name="cube3d">3D cube</string>
+    <string name="default_filter_name">Default filter</string>
+
+    <!--unsharp mask-->
+    <string name="amount">Amount:</string>
+    <string name="radius">Radius:</string>
+    <string name="threshold">Threshold:</string>
+    <string name="unsharpButton">Apply Unsharp Mask</string>
+
+    <!--recognize-->
+    <string name="recognizeButton">Recognize</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button">Button</string>
+    <string name="importButton">import</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="slider">slider</string>
+    <string name="Mosaic_factor">Mosaic factor</string>
+    <string name="Grain_factor">Grain factor</string>
+    <string name="Retouching_factor">Retouching factor</string>
+    <string name="Size_of_brush">Size of brush</string>
+    <string name="Brightness_factor">Brightness factor</string>
+    <string name="Warm_factor">Warm factor</string>
+    <string name="scale">scale</string>
+    <string name="scaling_factor">Scaling factor:</string>
+    <string name="angle">Angle:</string>
 </resources>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.colorFilters.ColorFiltersFragment">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/blackAndWhite"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Black and White Filter"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/black" />
+
+            <ImageButton
+                android:id="@+id/mosaic"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="mosaic"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/mosaic" />
+
+            <ImageButton
+                android:id="@+id/gaussingBlurFilter"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Gaussing Blur Filter"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/gaussin"/>
+            <ImageButton
+                android:id="@+id/noir"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="noir"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/noir"/>
+            <ImageButton
+                android:id="@+id/warm"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="warm"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/warm" />
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

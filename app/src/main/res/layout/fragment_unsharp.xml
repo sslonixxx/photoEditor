@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.unsharpMask.UnsharpFragment">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textAlignment="gravity"
+        android:text="@string/amount"
+        android:textColor="@color/woodsmoke" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/slider1"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:stepSize="0.1"
+        android:valueFrom="0.0"
+        android:valueTo="2.0"
+        android:thumb="@drawable/heart"
+        app:thumbTint="@color/woodsmoke"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textAlignment="gravity"
+        android:text="@string/radius"
+        android:textColor="@color/woodsmoke" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/slider2"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:stepSize="1"
+        android:valueFrom="0"
+        android:valueTo="10"
+        android:thumb="@drawable/heart"
+        app:thumbTint="@color/woodsmoke"/>
+
+    <Button
+        android:id="@+id/applyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="Apply Unsharp Mask" />
+
+</LinearLayout>
