@@ -1,9 +1,12 @@
 package com.example.photoeditor.ui.rotation
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -17,21 +20,32 @@ import kotlinx.coroutines.withContext
 
 class RotationFragment : Fragment() {
 
-    private var _binding: FragmentRotationBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentRotationBinding
+    lateinit var imageView: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        _binding = FragmentRotationBinding.inflate(inflater, container, false)
+        binding = FragmentRotationBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val imageView = activity?.findViewById<ImageView>(R.id.imageView)!!
+        return root
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        imageView = activity?.findViewById(R.id.imageView)!!
+        val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+
+        val originalImage = imageView.drawable
+        var currentImage: Drawable? = null
+
         val slider = binding.slider
-        var previousSliderValue = slider.value // Сохраняем изначальное значение слайдера
         val matrix = getPixelsFromImageView(imageView)
+
         slider.addOnChangeListener { _, value, _ ->
             if (matrix != null) {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -61,22 +75,31 @@ class RotationFragment : Fragment() {
                         }
                     }
                     imageView.setImageBitmap(transposedBitmap)
+                    currentImage = imageView.drawable
+
                 }
             }
         }
-        return root
+        compareButton.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    imageView.setImageDrawable(originalImage)
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    imageView.setImageDrawable(currentImage)
+                }
+            }
+            true
+        }
     }
 
-
-    fun getPixelsFromImageView(imageView: ImageView): Array<IntArray>? {
+    private fun getPixelsFromImageView(imageView: ImageView): Array<IntArray>? {
         val drawable = imageView.drawable
-        // Проверяем, является ли Drawable экземпляром BitmapDrawable
         if (drawable is BitmapDrawable) {
-            // Получаем битмапу изображения
             val bitmap = drawable.bitmap
             val width = bitmap.width
             val height = bitmap.height
-            // Создаем матрицу для хранения пикселей
             val pixels = Array(height) { IntArray(width) }
             for (y in 0 until height) {
                 for (x in 0 until width) {
@@ -88,11 +111,9 @@ class RotationFragment : Fragment() {
         return null
     }
 
-
-    fun transposePixelsMatrixby270(matrix: Array<IntArray>): Array<IntArray> {
+    private fun transposePixelsMatrixby270(matrix: Array<IntArray>): Array<IntArray> {
         val rows = matrix.size
         val cols = matrix[0].size
-        // Создаем новую матрицу для транспонированных пикселей
         val transposedMatrix = Array(cols) { IntArray(rows) }
         for (i in 0 until rows) {
             for (j in 0 until cols) {
@@ -102,11 +123,9 @@ class RotationFragment : Fragment() {
         return transposedMatrix
     }
 
-
-    fun transposePixelsMatrixby90(matrix: Array<IntArray>): Array<IntArray> {
+    private fun transposePixelsMatrixby90(matrix: Array<IntArray>): Array<IntArray> {
         val rows = matrix.size
         val cols = matrix[0].size
-        // Создаем новую матрицу для транспонированных пикселей
         val transposedMatrix = Array(cols) { IntArray(rows) }
         for (i in 0 until rows) {
             for (j in 0 until cols) {
@@ -128,20 +147,15 @@ class RotationFragment : Fragment() {
         return rotatedMatrix
     }
 
-    fun createBitmapFromMatrix(matrix: Array<IntArray>): Bitmap {
+    private fun createBitmapFromMatrix(matrix: Array<IntArray>): Bitmap {
         val rows = matrix.size
         val cols = matrix[0].size
         val bitmap = Bitmap.createBitmap(cols, rows, Bitmap.Config.ARGB_8888)
         for (i in 0 until rows) {
             for (j in 0 until cols) {
-                bitmap.setPixel(j, i, matrix[i][j]) // Пиксели не отражаются
+                bitmap.setPixel(j, i, matrix[i][j])
             }
         }
         return bitmap
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

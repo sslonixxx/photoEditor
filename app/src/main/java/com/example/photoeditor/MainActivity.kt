@@ -4,10 +4,12 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView(navController)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onStart() {
         super.onStart()
         val imageView = binding.imageView
@@ -68,11 +71,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-            val bitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
+            val bitmap =
+                Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             imageView.draw(canvas)
             saveImageToGallery(bitmap)
         }
+
 
     }
 
@@ -121,15 +126,13 @@ class MainActivity : AppCompatActivity() {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 }
                 Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, resolutionText, Toast.LENGTH_SHORT).show() // Добавляем текст с разрешением
+                Toast.makeText(this, resolutionText, Toast.LENGTH_SHORT)
+                    .show() // Добавляем текст с разрешением
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
-
-
-
 
 
     private fun getPermission() {

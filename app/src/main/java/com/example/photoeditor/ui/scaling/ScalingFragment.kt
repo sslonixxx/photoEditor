@@ -1,9 +1,12 @@
 package com.example.photoeditor.ui.scaling
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
@@ -15,18 +18,28 @@ import com.example.photoeditor.databinding.FragmentScalingBinding
 @Suppress("DEPRECATION")
 class ScalingFragment : Fragment() {
 
-    private var _binding: FragmentScalingBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentScalingBinding
     lateinit var imageView: ImageView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        _binding = FragmentScalingBinding.inflate(inflater, container, false)
+        binding = FragmentScalingBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        return root
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         imageView = activity?.findViewById(R.id.imageView)!!
+        val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
+
+        val originalImage = imageView.drawable
+        var currentImage: Drawable? = null
+
         val slider = binding.slider
         val button = binding.scalingButton
         imageView.setDrawingCacheEnabled(true)
@@ -55,40 +68,41 @@ class ScalingFragment : Fragment() {
                 savedImage = newImage;
                 imageView.setImageBitmap(savedImage)
             }
+            currentImage = imageView.drawable
 
         }
-        return root
+        compareButton.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    imageView.setImageDrawable(originalImage)
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    imageView.setImageDrawable(currentImage)
+
+                }
+            }
+            true
+        }
     }
 
-    fun bilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
+
+    private fun bilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
         val newWidth = (width * k).toInt()
         val newHeight = (height * k).toInt()
-        val resultBitmap = Bitmap.createBitmap(
-            newWidth,
-            newHeight,
-            Bitmap.Config.ARGB_8888
-        ) // новый Bitmap, куда мы будем записывать результаты интерполяции
+        val resultBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888) // новый Bitmap, куда мы будем записывать результаты интерполяции
 
         val pixels = IntArray(width * height)
-        bitmap.getPixels(
-            pixels,
-            0,
-            width,
-            0,
-            0,
-            width,
-            height
-        ) //массив, содержащий пиксели исходного изображения
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height) //массив, содержащий пиксели исходного изображения
 
         for (y in 0 until newHeight) { //Внешний цикл проходит по каждой строке пикселей в новом изображении
             val srcY = y / k
             val yFloor = srcY.toInt() //левый пиксель в квадрате 2x2
             val yCeil = (srcY + 1).toInt()
                 .coerceAtMost(height - 1) // координаты соседних пикселей, которые составляют квадрат 2x2
-            val yWeight =
-                srcY - yFloor //дробные части координат, которые будут использоваться в весовых коэффициентах для интерполяции
+            val yWeight = srcY - yFloor //дробные части координат, которые будут использоваться в весовых коэффициентах для интерполяции
 
             for (x in 0 until newWidth) { //Внутренний цикл проходит по каждому столбцу пикселей в новом изображении
                 val srcX = x / k
@@ -119,18 +133,13 @@ class ScalingFragment : Fragment() {
                         Color.red(p3) * (1 - xWeight) * yWeight +
                         Color.red(p4) * xWeight * yWeight).toInt()
 
-                resultBitmap.setPixel(
-                    x,
-                    y,
-                    Color.rgb(red, green, blue)
-                ) //Установка нового цвета пикселя
+                resultBitmap.setPixel(x, y, Color.rgb(red, green, blue)) //Установка нового цвета пикселя
             }
         }
-
         return resultBitmap
     }
 
-    fun generateMipmaps(bitmap: Bitmap): List<Bitmap> {
+    private fun generateMipmaps(bitmap: Bitmap): List<Bitmap> {
         val mipmaps = mutableListOf<Bitmap>() // список для хранения всех уровней mipmaps
         var currentBitmap = bitmap // текущее изображение, начиная с исходного
 
@@ -146,7 +155,7 @@ class ScalingFragment : Fragment() {
         return mipmaps
     }
 
-    fun trilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
+    private fun trilinearInterpolation(bitmap: Bitmap, k: Float): Bitmap {
         // Генерация mipmap
         val mipmaps = generateMipmaps(bitmap)
 
@@ -180,20 +189,14 @@ class ScalingFragment : Fragment() {
 
                 // Интерполяция цветовых каналов
                 val red = (Color.red(color1) * (1 - alpha) + Color.red(color2) * alpha).toInt()
-                val green =
-                    (Color.green(color1) * (1 - alpha) + Color.green(color2) * alpha).toInt()
+                val green = (Color.green(color1) * (1 - alpha) + Color.green(color2) * alpha).toInt()
                 val blue = (Color.blue(color1) * (1 - alpha) + Color.blue(color2) * alpha).toInt()
 
                 // Установка нового цвета пикселя
                 resultBitmap.setPixel(x, y, Color.rgb(red, green, blue))
             }
         }
-
         return resultBitmap
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
