@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:layout_marginStart="2dp"
+        android:textAlignment="gravity"
         android:text="@string/amount"
         android:textColor="@color/woodsmoke" />
 
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:layout_marginStart="2dp"
+        android:textAlignment="gravity"
         android:text="@string/radius"
         android:textColor="@color/woodsmoke" />
 
