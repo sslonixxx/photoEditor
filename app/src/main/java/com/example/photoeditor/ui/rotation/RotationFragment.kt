@@ -41,7 +41,6 @@ class RotationFragment : Fragment() {
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
 
         val originalImage = imageView.drawable
-        var currentImage: Drawable? = null
 
         val slider = binding.slider
         val matrix = getPixelsFromImageView(imageView)
@@ -75,22 +74,12 @@ class RotationFragment : Fragment() {
                         }
                     }
                     imageView.setImageBitmap(transposedBitmap)
-                    currentImage = imageView.drawable
 
                 }
             }
         }
-        compareButton.setOnTouchListener { view, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    imageView.setImageDrawable(originalImage)
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    imageView.setImageDrawable(currentImage)
-                }
-            }
-            true
+        compareButton.setOnClickListener {
+            imageView.setImageDrawable(originalImage);
         }
     }
 

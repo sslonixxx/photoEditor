@@ -46,7 +46,6 @@ class ColorFiltersFragment : Fragment() {
         spinner = activity?.findViewById(R.id.progressBar1)!!
         val compareButton = activity?.findViewById<ImageView>(R.id.compareButton)!!
         val userImage = imageView.drawable
-        currentImage = imageView.drawable
 
         originalBitmap = (imageView.drawable as BitmapDrawable).bitmap
 
@@ -66,16 +65,8 @@ class ColorFiltersFragment : Fragment() {
             findNavController().navigate(R.id.warmFragment)
         }
 
-        compareButton.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    imageView.setImageDrawable(userImage)
-                }
-                MotionEvent.ACTION_UP -> {
-                    imageView.setImageDrawable(currentImage)
-                }
-            }
-            true
+        compareButton.setOnClickListener {
+            imageView.setImageDrawable(userImage);
         }
     }
 

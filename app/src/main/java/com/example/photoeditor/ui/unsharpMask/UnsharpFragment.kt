@@ -60,7 +60,6 @@ class UnsharpFragment : Fragment() {
                 Toast.makeText(activity, "Image not set or invalid image format", Toast.LENGTH_SHORT).show()
             }
         }
-
         compareButton.setOnClickListener { imageView.setImageDrawable(initialImage); }
     }
 
@@ -161,7 +160,6 @@ class UnsharpFragment : Fragment() {
                 result.setPixel(x, y, Color.rgb(rInt, gInt, bInt))
             }
         }
-
         return result
     }
 }

@@ -11,4 +11,11 @@
     <!--Main activity-->
     <dimen name="activity_margin">10dp</dimen>
     <dimen name="progress_bar_size">28dp</dimen>
+
+    <!--Rotation fragment-->
+    <dimen name="bottom_margin_top">8dp</dimen>
+
+    <!--Image bottom-->
+    <dimen name="image_size">90dp</dimen>
+    <dimen name="padding">8dp</dimen>
 </resources>
