@@ -9,4 +9,7 @@
     <color name="wordly_grey">#cec6bf</color>
     <color name="tol_grey">#4e4851</color>
     <color name="woodsmoke">#2b3230</color>
+
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
 </resources>

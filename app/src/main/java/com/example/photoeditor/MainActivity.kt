@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-            val bitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
+            val bitmap =
+                Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             imageView.draw(canvas)
             saveImageToGallery(bitmap)
@@ -117,6 +118,7 @@ class MainActivity : AppCompatActivity() {
             requestPermissions.launch(arrayOf(READ_EXTERNAL_STORAGE))
         }
     }
+
     private fun saveImageToGallery(bitmap: Bitmap) {
         val resolver = contentResolver
         val fileName = System.currentTimeMillis().toString() + ".png"
@@ -139,7 +141,8 @@ class MainActivity : AppCompatActivity() {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 }
                 Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, resolutionText, Toast.LENGTH_SHORT).show() // Добавляем текст с разрешением
+                Toast.makeText(this, resolutionText, Toast.LENGTH_SHORT)
+                    .show() // Добавляем текст с разрешением
             }
         } catch (e: IOException) {
             e.printStackTrace()
